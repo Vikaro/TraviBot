@@ -26,14 +26,7 @@ app.get('/api/login', async (req, res) => {
 app.get('/api/buildings', async (req, res) => {
     // let buildingsViewModel : BuildingListViewModel = buildings;
 
-    var buildings = await travianAPI.GetResourceBuildings();
-    buildings.ActualQueue.forEach(el => {
-        buildQueue.addExistingBuilding(el);
-    });
-
-    BuildingsDb.ActualQueue = buildings.ActualQueue;
-    BuildingsDb.AvilableBuildings = buildings.AvilableBuildings;
-    BuildingsDb.AddBuildings(await travianAPI.GetVillageBuildings());
+  
 
     res.send(BuildingsDb);
 });
@@ -79,4 +72,6 @@ app.get('/api/buildings/:buildingId/units', async (req, res) => {
 
 });
 
-// app.get()
+app.get('/api/villages', async(req, res) => {
+
+})

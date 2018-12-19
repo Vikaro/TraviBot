@@ -21,3 +21,14 @@ export async function BuildBuilding(building: Building): Promise<Building> {
     BuildingsDb.AddBuildings([updatedBuilding]);
     return updatedBuilding;
 }
+
+export async function FetchInitialData() : Promise<void> {
+    var buildings = await travianAPI.GetResourceBuildings();
+    buildings.ActualQueue.forEach(el => {
+        buildQueue.addExistingBuilding(el);
+    });
+
+    BuildingsDb.ActualQueue = buildings.ActualQueue;
+    BuildingsDb.AvilableBuildings = buildings.AvilableBuildings;
+    BuildingsDb.AddBuildings(await travianAPI.GetVillageBuildings());
+}
