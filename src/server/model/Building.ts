@@ -47,7 +47,15 @@ export default class Building {
     }
 
     public _setLevel() {
-        return parseInt(this.level) == this.level ? parseInt(this.level) : this.level;
-    }
+        if (this.level) {
+            console.log(this.level);
+            console.log(typeof (this.level));
+            if (typeof (this.level) == "string") {
+                this.level = this.level.replace(/level/ig, '')
+                this.level = this.level.trim();
+                return parseInt(this.level) == this.level ? parseInt(this.level) : this.level;
+            } else return this.level;
 
+        }
+    }
 }

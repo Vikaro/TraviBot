@@ -1,12 +1,12 @@
 import Building,{maxLevel} from './Building';
 
-
+const maxBuildingQueue = 5;
 export default class BuildingsStore {
     public AvilableBuildings: {} = {}
     public ActualQueue: Building[] = [];
 
     public GetUpgreadableBuildings() : Building[]{
-        return this.GetBuildings().filter(el => el.level != maxLevel)
+        return this.GetBuildings().filter(el => el.level !== maxLevel)
             .sort((a, b) => a.level - b.level);
     }
 

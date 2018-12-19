@@ -38,7 +38,7 @@ export default class BuildQueue {
         })
     }
 
-    addNewBuilding = (building: Building) => {
+    addNewBuilding = (building: Building, callback? : () => void) => {
 
         var task = new QueueTask(() => new Promise(async (resolve, reject) => {
             // await BuildBuilding(building).then(updatedBuilding => {
@@ -54,7 +54,8 @@ export default class BuildQueue {
             try {
                 const updatedBuilding = await BuildBuilding(building);
                 const { duration } = updatedBuilding;
-                const response = await this.delay(duration)
+                const response = await this.delay(duration);
+                callback();
                 resolve(updatedBuilding);
             } catch (error) {
                 console.log(error.description);

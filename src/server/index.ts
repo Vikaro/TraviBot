@@ -41,19 +41,24 @@ app.get('/api/buildings', async (req, res) => {
 app.get('/api/buildings/auto', async (req, res) => {
     // objs.sort((a,b) => (a.last_nom > b.last_nom) ? 1 : ((b.last_nom > a.last_nom) ? -1 : 0)); 
     console.log("auto");
-    var sorted = BuildingsDb.GetUpgreadableBuildings();
-    await buildQueue.addNewBuilding(sorted[0]);
-    res.send(sorted[0]);
-    // do {
-    //     sorted = BuildingsDb.GetUpgreadableBuildings();
-    //     console.log(sorted);
-    //     if (sorted.length > 0) {
-            
-    //         buildQueue.addNewBuilding(sorted[0]);
-    //     }
-    //     await sleep(10000);
-    // } while (sorted.length > 0);
+    let sorted = BuildingsDb.GetUpgreadableBuildings();
+    let retries = 1;
+    const buildFunction = () => {
+        const sorted = BuildingsDb.GetUpgreadableBuildings();
+        if (sorted.length > 0) {
+            console.log(sorted[0])
+            buildQueue.addNewBuilding(sorted[0], buildFunction);
+        }
+    };
+    if (sorted.length > 0) {
+        buildQueue.addNewBuilding(sorted[0], buildFunction);
+        res.send(sorted[0]);
+    } else {
+        res.send(null);
+    }
+    
 })
+
 function sleep(ms) {
     return new Promise(resolve => {
         setTimeout(resolve, ms)
@@ -74,3 +79,4 @@ app.get('/api/buildings/:buildingId/units', async (req, res) => {
 
 });
 
+// app.get()

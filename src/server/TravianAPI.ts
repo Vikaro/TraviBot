@@ -9,7 +9,7 @@ import { BuildingsDb } from './db';
 import { exportToJsonFile } from './utility/file';
 
 const Settings = {
-    url: "http://www.x10000.aspidanetwork.com",
+    url: "http://www.x5000000.aspidanetwork.com",
     login: "vikaro",
     password: 'jc*a5cv#KJ5RqbYU9$gB'
 }

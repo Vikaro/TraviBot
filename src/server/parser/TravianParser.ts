@@ -58,11 +58,13 @@ export function ParseBuildingView(res: Response) {
     const $res = $(res.text);
 
     const name = $res.find(".build > .titleInHeader").text();
+    const level = $res.find(".build > .titleInHeader > .level").text();
+
     const resources = $res.find(".contractCosts .resources").children().map(ParseResources).get();
     const duration = $res.find(".upgradeButtonsContainer > .section1 > .clocks").text();
     var buildButton = $res.find(".upgradeButtonsContainer > .section1 > .build");
 
-    var building = new Building({ name, resources, duration })
+    var building = new Building({ name, resources, duration, level })
 
     if (buildButton.length > 0) {
         const onClick = buildButton.attr('onclick');
