@@ -6,6 +6,7 @@ import Building from './model/Building';
 import BuildingsStore from './model/BuildingsStore';
 import { ParseBuildings, ParseActualQueue, ParseBuildingView } from './parser/TravianParser';
 import { BuildingsDb } from './db';
+import { exportToJsonFile } from './utility/file';
 
 const Settings = {
     url: "http://www.x10000.aspidanetwork.com",
@@ -29,17 +30,20 @@ export default class TravianAPI {
     BuildingPage = async (building: Building) => {
         return await this.agent.get(this.serverUrl + "/" + building.url)
     }
-    
-    BuildingUpgrade = async(building: Building) => {
+
+    BuildingUpgrade = async (building: Building) => {
         return await this.agent.get(encodeURI(this.serverUrl + "/" + building.upgradeUrl));
     }
-
+    LoginPage = async() => await this.agent.get(this.serverUrl);
     BuildBuilding = async (building: Building) => {
 
-        let newBuilding = await this.agent.get(this.serverUrl + "/" + building.url)
+        let newBuilding = await this.agent.get(this.serverUrl + "/" + building.url).then(res => {
+            // exportToJsonFile(res, "buildingViewResponse");
+            return res;
+        })
             // .use(superagentCheerio)
             .then(ParseBuildingView);
-        
+
         newBuilding.url = building.url;
 
         if (newBuilding.upgradeUrl) {
@@ -58,6 +62,7 @@ export default class TravianAPI {
         return await this.agent.get(this.serverUrl + "/dorf1.php")
             .use(superagentCheerio)
             .then((res) => {
+                // exportToJsonFile(res, "getResourceBuildings");
                 let model = new BuildingsStore();
                 // @ts-ignore
                 var buildingList = res.$(".buildingList .boxes-contents ul li");
@@ -73,6 +78,7 @@ export default class TravianAPI {
         try {
             var loginPage = await this.agent.get(this.serverUrl)
                 .use(superagentCheerio);
+            // exportToJsonFile(loginPage, "loginPageRespond");
             // @ts-ignore
             var actionUrl = loginPage.$("form[method='post']").attr("action");
             // @ts-ignore
@@ -100,6 +106,7 @@ export default class TravianAPI {
         return await this.agent.get(this.serverUrl + "/dorf2.php")
             .use(superagentCheerio)
             .then((res) => {
+                // exportToJsonFile(res, "getVillageBuildings");
                 // @ts-ignore
                 var $areas = res.$('#village_map area');
                 var buildings: Building[] = $areas.map(ParseBuildings).get();

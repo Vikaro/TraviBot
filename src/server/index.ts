@@ -19,7 +19,7 @@ app.listen(8080, () => console.log('Listening on port 8080!'));
 app.get('/api/login', async (req, res) => {
     var loginRes = await travianAPI.LoginUser();
 
-    await travianAPI.GetVillageBuildings();
+    // await travianAPI.GetVillageBuildings();
     res.send(loginRes);
 })
 
