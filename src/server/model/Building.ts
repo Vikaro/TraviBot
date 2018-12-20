@@ -48,8 +48,6 @@ export default class Building {
 
     public _setLevel() {
         if (this.level) {
-            console.log(this.level);
-            console.log(typeof (this.level));
             if (typeof (this.level) == "string") {
                 this.level = this.level.replace(/level/ig, '')
                 this.level = this.level.trim();

@@ -2,8 +2,8 @@ import Building,{maxLevel} from './Building';
 
 const maxBuildingQueue = 5;
 export default class BuildingsStore {
-    public AvilableBuildings: {} = {}
-    public ActualQueue: Building[] = [];
+    public avilableBuildings: {} = {}
+    // public actualQueue: Building[] = [];
 
     public GetUpgreadableBuildings() : Building[]{
         return this.GetBuildings().filter(el => el.level !== maxLevel)
@@ -11,7 +11,7 @@ export default class BuildingsStore {
     }
 
     private GetBuildings(): Array<Building>{
-        return Object.values(this.AvilableBuildings)
+        return Object.values(this.avilableBuildings)
     }
 
     public AddBuildings (buildings : Array<Building>){
@@ -22,8 +22,8 @@ export default class BuildingsStore {
             [building.id] : building}
         });
 
-        this.AvilableBuildings = {
-            ...this.AvilableBuildings,
+        this.avilableBuildings = {
+            ...this.avilableBuildings,
             ...newBuildings
         }
     }

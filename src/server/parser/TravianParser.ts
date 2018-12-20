@@ -2,7 +2,7 @@ import * as $ from 'cheerio';
 import Building, { maxLevel } from '../model/Building';
 import { Response } from 'superagent';
 
-export function ParseBuildings(index, el) {
+export function ParseBuildings(index, el): Building {
     let level = maxLevel;
 
     const $el = $(el);
@@ -13,7 +13,7 @@ export function ParseBuildings(index, el) {
     // const $building = $title.children().first();
     // var buildingName = $building.text() || "Empty Place";
     var name = $title.first().text() || "Empty Place";
-    const resources = $title.children().map(ParseResources).get();
+    const resources = $title.children().map(ParseResourcesTypes).get();
     const splittedName = name.split("level");
 
     if (splittedName.length > 1) {
@@ -24,7 +24,7 @@ export function ParseBuildings(index, el) {
     return building;
 }
 
-export function ParseResources(index, el) {
+export function ParseResourcesTypes(index, el) {
     var $el = $(el);
     if ($el.parent().hasClass("resources")) {
         var iconClass = $el.attr('class');
@@ -41,7 +41,7 @@ export function ParseResources(index, el) {
     }
 }
 
-export function ParseActualQueue(index, el) {
+export function ParseActualQueue(index, el): Building {
     var $el = $(el);
     var name = $el.find(".name").text().trim().replace(/\t/g, '');
     var level = $el.find(".name lvl").text().trim();
@@ -54,13 +54,13 @@ export function ParseActualQueue(index, el) {
     return building;
 }
 
-export function ParseBuildingView(res: Response) {
+export function ParseBuildingPage(res: Response) {
     const $res = $(res.text);
 
     const name = $res.find(".build > .titleInHeader").text();
     const level = $res.find(".build > .titleInHeader > .level").text();
 
-    const resources = $res.find(".contractCosts .resources").children().map(ParseResources).get();
+    const resources = $res.find(".contractCosts .resources").children().map(ParseResourcesTypes).get();
     const duration = $res.find(".upgradeButtonsContainer > .section1 > .clocks").text();
     var buildButton = $res.find(".upgradeButtonsContainer > .section1 > .build");
 
@@ -73,4 +73,35 @@ export function ParseBuildingView(res: Response) {
     }
 
     return building;
+}
+
+export function ParseResourcesPage(res: Response): { actualQueue: Array<Building>, buildings: Array<Building> } {
+    const $res = $(res.text);
+    // exportToJsonFile(res, "getResourceBuildings");
+    // let model = new BuildingsStore();
+    // @ts-ignore
+    var buildingList = $res.find(".buildingList .boxes-contents ul li");
+    const actualQueue = buildingList.map(ParseActualQueue).get();
+
+    // @ts-ignore
+    var $areas = $res.find('.village1 area');
+    const buildings: Array<Building> = $areas.map(ParseBuildings).get();
+    return {
+        actualQueue, buildings
+    }
+}
+export function parseVillageList(res: Response): Array<any> {
+    const $res = $(res.text);
+    const idParam = "?newdid=";
+    const villagesArray = $res.find("#sidebarBoxVillagelist li").map((index, el) => {
+        const $el = $(el);
+        const isActive = $el.hasClass("active");
+        const href = $el.find("a").attr("href");
+        const id = href.substring(href.lastIndexOf(idParam)+idParam.length);
+        const name = $el.find(".name").text()
+        return {
+            id, isActive, name
+        }
+    }).get();
+    return villagesArray;
 }

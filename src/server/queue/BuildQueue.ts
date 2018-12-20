@@ -6,15 +6,15 @@ import TravianAPI from '../TravianAPI';
 import { stat } from 'fs';
 
 import { BuildBuilding } from '../services/buildingsService'
+import Village from '../model/Village';
 var readline = require('readline');
 
 export default class BuildQueue {
     private queue: Queue;
-    private travianAPI: TravianAPI;
-    constructor(travianAPI: TravianAPI) {
-        this.travianAPI = travianAPI
-
-        this.queue = new Queue(this.process, { maxRetries: 1, retryDelay: 1000 });
+    private _village : Village;
+    constructor(village : Village) {
+        this._village = village;
+        this.queue = new Queue(this.process, { maxRetries: 10, retryDelay: 10000 });
         this.queue.on('task_finish', function (taskId, result, stats) {
             // taskId = 1, result: 3, stats = { elapsed: <time taken> }
             // taskId = 2, result: 5, stats = { elapsed: <time taken> }
@@ -53,6 +53,7 @@ export default class BuildQueue {
             // });
             try {
                 const updatedBuilding = await BuildBuilding(building);
+                this._village.buildingStore.AddBuildings([updatedBuilding]);
                 const { duration } = updatedBuilding;
                 const response = await this.delay(duration);
                 callback();

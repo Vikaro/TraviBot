@@ -4,12 +4,12 @@ import * as superagentCheerio from 'superagent-cheerio';
 import * as $ from 'cheerio';
 import Building from './model/Building';
 import BuildingsStore from './model/BuildingsStore';
-import { ParseBuildings, ParseActualQueue, ParseBuildingView } from './parser/TravianParser';
-import { BuildingsDb } from './db';
+import { ParseBuildings, ParseActualQueue, ParseBuildingPage } from './parser/TravianParser';
+// import { BuildingsDb } from './db';
 import { exportToJsonFile } from './utility/file';
 
 const Settings = {
-    url: "http://www.x5000000.aspidanetwork.com",
+    url: "http://www.x1000.aspidanetwork.com",
     login: "vikaro",
     password: 'jc*a5cv#KJ5RqbYU9$gB'
 }
@@ -17,7 +17,9 @@ const Settings = {
 
 export default class TravianAPI {
 
-    private serverUrl = "";
+    private serverUrl;
+    private resourceUrl = "/dorf1.php";
+
     private agent: request.SuperAgentStatic;
 
     constructor() {
@@ -35,6 +37,8 @@ export default class TravianAPI {
         return await this.agent.get(encodeURI(this.serverUrl + "/" + building.upgradeUrl));
     }
     LoginPage = async() => await this.agent.get(this.serverUrl);
+    ResourcesPage = async() => await this.agent.get(this.serverUrl + this.resourceUrl )
+
     BuildBuilding = async (building: Building) => {
 
         let newBuilding = await this.agent.get(this.serverUrl + "/" + building.url).then(res => {
@@ -42,7 +46,7 @@ export default class TravianAPI {
             return res;
         })
             // .use(superagentCheerio)
-            .then(ParseBuildingView);
+            .then(ParseBuildingPage);
 
         newBuilding.url = building.url;
 
@@ -51,29 +55,29 @@ export default class TravianAPI {
             var buildRequest = await this.agent.get(encodeURI(this.serverUrl + "/" + newBuilding.upgradeUrl));
             console.log("NewBuilding Updated");
             console.log(newBuilding);
-            BuildingsDb.AddBuildings([newBuilding])
+            // BuildingsDb.AddBuildings([newBuilding])
             return newBuilding;
         }
 
         return null;
     }
 
-    GetResourceBuildings = async (): Promise<BuildingsStore> => {
-        return await this.agent.get(this.serverUrl + "/dorf1.php")
-            .use(superagentCheerio)
-            .then((res) => {
-                // exportToJsonFile(res, "getResourceBuildings");
-                let model = new BuildingsStore();
-                // @ts-ignore
-                var buildingList = res.$(".buildingList .boxes-contents ul li");
-                model.ActualQueue = buildingList.map(ParseActualQueue).get();
+    // GetResourceBuildings = async (): Promise<BuildingsStore> => {
+    //     return await this.agent.get(this.serverUrl + "/dorf1.php")
+    //         .use(superagentCheerio)
+    //         .then((res) => {
+    //             // exportToJsonFile(res, "getResourceBuildings");
+    //             let model = new BuildingsStore();
+    //             // @ts-ignore
+    //             var buildingList = res.$(".buildingList .boxes-contents ul li");
+    //             model.ActualQueue = buildingList.map(ParseActualQueue).get();
 
-                // @ts-ignore
-                var $areas = res.$('.village1 area');
-                model.AddBuildings($areas.map(ParseBuildings).get());
-                return model;
-            })
-    }
+    //             // @ts-ignore
+    //             var $areas = res.$('.village1 area');
+    //             model.AddBuildings($areas.map(ParseBuildings).get());
+    //             return model;
+    //         })
+    // }
     LoginUser = async () => {
         try {
             var loginPage = await this.agent.get(this.serverUrl)
@@ -93,7 +97,9 @@ export default class TravianAPI {
                 .send(`pw=${Settings.password}`)
                 .send(`ft=a4`)
                 .send("w=100:100")
-                // .send(`login=${loginValue}`)
+                .send("s2=Go")
+                .send("lowRes=1")
+                //.send(`login=${loginValue}`)
                 .accept("*/*")
 
         } catch (error) {
