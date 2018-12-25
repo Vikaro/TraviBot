@@ -26,7 +26,7 @@ export default class TravianAPI {
     private resourceUrl = "/dorf1.php";
     private buildUrl = "/build.php?";
     private adventureUrl = '/hero_adventure.php'
-    private adventureStart= '/a2b.php'
+    private adventureStart = '/a2b.php'
 
     private agent: request.SuperAgentStatic;
 
@@ -41,10 +41,11 @@ export default class TravianAPI {
     BuildNewBuildingPage = async (placeId, category) => await this.agent.get(this.serverUrl + this.buildUrl + `id=${placeId}&category=${category}`);
     BuildingPage = async (building: Building) => await this.agent.get(this.serverUrl + "/" + building.url)
 
-    BuildingUpgrade = async (building: Building) => await this.agent.get(encodeURI(this.serverUrl + "/" + building.upgradeUrl))
-    LoginPage = async () => await this.agent.get(this.serverUrl);
-    ResourcesPage = async () => await this.agent.get(this.serverUrl + this.resourceUrl)
-    changeVillage = async (villageId) => await this.agent.get(this.serverUrl + this.resourceUrl + '?newdid=' + villageId)
+    buildingUpgrade = async (building: Building) => await this.agent.get(encodeURI(this.serverUrl + "/" + building.upgradeUrl))
+    loginPage = async () => await this.agent.get(this.serverUrl);
+    resourcesPage = async () => await this.agent.get(this.serverUrl + this.resourceUrl);
+    changeVillage = async (villageId) => await this.agent.get(this.serverUrl + this.resourceUrl + '?newdid=' + villageId);
+    smithyUpgrade = async (link) => await this.agent.get(this.serverUrl + '/' + link);
     BuildBuilding = async (building: Building) => {
 
         let newBuilding = await this.agent.get(this.serverUrl + "/" + building.url).then(res => {

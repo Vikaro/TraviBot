@@ -3,11 +3,9 @@ import { expect, assert } from 'chai';
 import TravianAPI from '../../server/TravianAPI';
 import { parseVillageBuildings, parseAdventuresPage, parseResourceBuildings } from '../../server/parser/TravianParser';
 import { Response } from 'superagent';
-var fs = require('fs');
+import { parseSmithyPage } from '../../server/parser/smithyParser';
+import * as fs from 'fs';
 
-fs.readFile('DATA', 'utf8', function (err, contents) {
-    console.log(contents);
-});
 const api = new TravianAPI()
 // var assert = require('assert');
 describe('Array', function () {
@@ -29,7 +27,6 @@ describe('Parsing villages buildings', function () {
             res['text'] = file;
             const buildings = parseVillageBuildings(res);
             assert.isAtLeast(buildings.length, 1);
-            console.log(buildings);
         });
     });
     describe('village2', function () {
@@ -41,7 +38,6 @@ describe('Parsing villages buildings', function () {
             res['text'] = file;
             const buildings = parseResourceBuildings(res);
             assert.isAtLeast(buildings.length, 1);
-            console.log(buildings);
         });
     });
 })
@@ -59,9 +55,27 @@ describe('Testing adventures functions', () => {
                 const adventures = parseAdventuresPage(res)
                 assert.isAtLeast(Object.keys(adventures.adventures).length, 1);
                 assert.isNotNull(adventures.heroVillageId)
-                console.log(adventures);
             });
         });
 
     });
-})
+});
+
+describe('Testing smithy', () => {
+    describe('parsing smithy page', () => {
+        const inputFile = fs.readFileSync('src/tests/server/responses/smithy1.html', 'utf8');
+        const inputFile2 = fs.readFileSync('src/tests/server/responses/smithy2.html', 'utf8');
+        const fileArray = [inputFile,inputFile2];
+        fileArray.forEach(file => {
+            it('should return dictionary of upgrades', () => {
+                // @ts-ignore
+                let res: Response = {};
+                res['text'] = file;
+                const upgrades = parseSmithyPage(res);
+                assert.isAtLeast(Object.keys(upgrades).length, 1);
+            });
+        });
+
+    });
+});
+

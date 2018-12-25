@@ -11,6 +11,18 @@ export default class BuildingsStore {
             .sort((a, b) => a.level - b.level);
     }
 
+    public GetSmithy() : Building {
+        return this.GetBuildings().find(el => el.name.includes('Smithy'))
+    }
+
+    public GetAcademy(): Building {
+        return this.GetBuildings().find(el => el.name.includes('Academy'))
+    }
+
+    public GetTownHall(): Building {
+        return this.GetBuildings().find(el => el.name.includes('Town Hall'))
+    }
+
     public GetBuildings(): Array<Building> {
         return Object.values(this.avilableBuildings)
     }
@@ -27,7 +39,7 @@ export default class BuildingsStore {
             ...newBuildings
         }
     }
-    
+
     public removeBuilding(building: Building) {
         var newAvailableBuildings = objectFilterKey(this.avilableBuildings, obj => obj !== building.id)
         this.avilableBuildings = newAvailableBuildings;

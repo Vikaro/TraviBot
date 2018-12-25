@@ -13,7 +13,7 @@ export async function BuildBuilding(building: Building): Promise<Building> {
         return res;
     }).then(parseBuildingPage);
     if (!buildingFromPage.upgradeUrl) throw new Error(`Error: ${buildingFromPage.name} :: ${buildingFromPage.id} - upgrade url not found`);
-    const buildUpgradeResponse = await travianAPI.BuildingUpgrade(buildingFromPage);
+    const buildUpgradeResponse = await travianAPI.buildingUpgrade(buildingFromPage);
     if (!isNaN(buildingFromPage.level))++buildingFromPage.level;
     const updatedBuilding = new Building({
         ...building,

@@ -1,17 +1,18 @@
 import * as Queue from 'better-queue';
 import QueueTask from '../model/queue/QueueTask';
 import * as AsyncLock from 'async-lock';
-import Adventure from '../model/adventure';
 import User from '../db';
 import { changeVillage } from '../services/villageService';
-import { startAdventure } from '../services/adventuresService';
 import { delay } from '../utility/Duration';
+import * as smithService from '../services/smithyService';
+import Upgrade from '../model/upgrade';
+import Village from '../model/Village';
 
-export default class adventuresQueue {
+export default class smithQueue {
     private queue: Queue;
-    private _user: User;
-    constructor(user) {
-        this._user = user;
+    private _village: Village;
+    constructor(village) {
+        this._village = village;
         this.queue = new Queue(this.process, { maxRetries: 10, retryDelay: 1000 });
         this.queue.on('task_finish', function (taskId, result, stats) {
             // taskId = 1, result: 3, stats = { elapsed: <time taken> }
@@ -26,7 +27,6 @@ export default class adventuresQueue {
     }
 
     process = function (data: QueueTask, done: Queue.ProcessFunctionCb<any>) {
-        console.log(data);
 
         data.Run().then((res) => {
             console.log("finished", res);
@@ -37,19 +37,18 @@ export default class adventuresQueue {
         });
     }
 
-    addNewAdventure(adventure: Adventure, callback?: () => void) {
-        var task = new QueueTask(`${adventure.id}`, () => new Promise(async (resolve, reject) => {
+    add(upgradeId: string, callback?: () => void) {
+        const upgrade =  this._village.smithyStore[upgradeId];
+        var task = new QueueTask(`${upgrade.title}`, () => new Promise(async (resolve, reject) => {
             // let updatedBuilding: Building, duration;
             try {
-                const { heroVillageId } = this._user;
-                if (!this._user.villages[heroVillageId].isActive) await changeVillage(this._user.villages[heroVillageId])
+                if (!this._village.isActive) await changeVillage(this._village)
 
-                await startAdventure(adventure)
+                await smithService.upgrade(this._village, upgrade.id)
 
-                await delay(adventure.moveTime);
-                await delay(adventure.moveTime);
+                await delay(upgrade.duration);
                 if (callback) callback();
-                resolve();
+                resolve(upgrade.title);
             } catch (error) {
                 console.log(error.description);
                 if (callback) callback();
@@ -58,6 +57,6 @@ export default class adventuresQueue {
             }
         }));
         this.queue.push(task);
-        console.log("Added new adventure to queue");
+        console.log("Added smithy upgrade to queue");
     }
 }

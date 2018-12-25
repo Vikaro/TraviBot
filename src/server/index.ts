@@ -10,6 +10,7 @@ import Village from './model/Village';
 import { User1 } from './db';
 import { fetchInitialData } from './services/villageService';
 import { getListOfAdventures, startAdventure } from './services/adventuresService';
+import { getUpgrades, upgrade } from './services/smithyService';
 const app = express();
 
 
@@ -99,8 +100,9 @@ app.get('/api/adventures', async (req, res) => {
 app.get('/api/adventures/auto', async (req, res) => {
     const allAdventures = Object.values(User1.adventures);
     allAdventures.forEach(adventure => {
-        User1.adventuresQueue.addNewAdventure(adventure)        
+        User1.adventuresQueue.addNewAdventure(adventure)
     });
+    res.send('added all adventures to queue');
 });
 
 app.get('/api/adventures/:id', async (req, res) => {
@@ -108,9 +110,46 @@ app.get('/api/adventures/:id', async (req, res) => {
 
     User1.adventuresQueue.addNewAdventure(User1.adventures[id])
     // await startAdventure(User1.heroVillageId, {id});
-    res.send('');
+    res.send(`added ${id} adventure to queue`);
 });
 
-app.get('/api/smithy', async (req,res) => {
-    
+app.get('/api/villages/:villageId/smithy', async (req, res) => {
+    const { villageId } = req.params;
+    const village = User1.villages[villageId];
+    const response = await getUpgrades(village);
+    village.smithyStore = response;
+    res.send(response);
 });
+
+app.get('/api/villages/:villageId/smithy/auto',async (req, res) => {
+    const { villageId } = req.params;
+    const village = User1.villages[villageId];
+
+    let upgrades = Object.keys(village.smithyStore); 
+    if(upgrades.length > 0) {
+        const task = async () => {
+            console.log(`village - ${villageId} smithy fetching new updates`)
+            const response = await getUpgrades(village);
+            village.smithyStore = response;
+            let upgrades = Object.keys(village.smithyStore);
+            if (upgrades.length > 0) {
+                village.getSmithyQueue().add(upgrades[0],task)
+            } else {
+                console.log(`village - ${villageId} :: no more upgrades found `)
+            }
+        };
+        village.getSmithyQueue().add(upgrades[0],task);
+        res.send(`village - ${villageId} smithy auto upgrade`);
+        return;
+    } 
+    res.send(`village - ${villageId} smithy upgrades not found`)
+});
+
+app.get('/api/villages/:villageId/smithy/:upgradeId', async (req, res) => {
+    const { villageId, upgradeId } = req.params;
+    const village = User1.villages[villageId];
+    village.getSmithyQueue().add(upgradeId);
+    // const response = await upgrade()
+    res.send(`upgrade ${upgradeId} added to queue`);
+});
+

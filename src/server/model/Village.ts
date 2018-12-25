@@ -3,6 +3,9 @@ import TravianAPI from "../TravianAPI";
 import BuildingsStore from "./BuildingsStore";
 import * as AsyncLock from 'async-lock';
 import User from "../db";
+import SmithQueue from "../queue/smithQueue";
+import smithQueue from "../queue/smithQueue";
+import Upgrade from "./upgrade";
 export default class Village {
     private _buildingQueue: BuildQueue;
     // army
@@ -11,30 +14,31 @@ export default class Village {
     private _workshopQueue;
     // upgrades
     private _academyQueue;
-    private _smithQueue;
+    private _smithQueue: smithQueue;
     // merchants
     private _marketplaceQueue;
     // culture
     private _townhallQueue;
 
-    public buildingStore : BuildingsStore;
+    public buildingStore: BuildingsStore;
+    public smithyStore: { [key: string]: Upgrade };
     public api: TravianAPI;
     public user: User;
     public id: number;
-    public isActive : boolean;
-    public name : string;
-    constructor(obj){
+    public isActive: boolean;
+    public name: string;
+    constructor(obj) {
         if (obj) {
             Object.assign(this, obj);
-            const {api} = obj;
+            const { api } = obj;
             this.buildingStore = new BuildingsStore();
             this._buildingQueue = new BuildQueue(this, this.user.lock);
+            this._smithQueue = new SmithQueue(this);
         }
 
     }
 
-    getBuildingsQueue(){
-       return this._buildingQueue; 
-    }
+    getBuildingsQueue = () => this._buildingQueue;
+    getSmithyQueue = () => this._smithQueue;
 
 }

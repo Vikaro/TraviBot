@@ -21,7 +21,7 @@ export async function setAllVillagesAsInactive(user: User) {
 }
 
 export async function fetchInitialData(user: User): Promise<User> {
-    let resourcePage = await travianAPI.ResourcesPage();
+    let resourcePage = await travianAPI.resourcesPage();
     const parsedVillages = parseVillageList(resourcePage);
     let villages = {};
     for (const parsedVillage of parsedVillages) {
