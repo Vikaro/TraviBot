@@ -1,7 +1,8 @@
 import BuildQueue from "../queue/BuildQueue";
 import TravianAPI from "../TravianAPI";
 import BuildingsStore from "./BuildingsStore";
-
+import * as AsyncLock from 'async-lock';
+import User from "../db";
 export default class Village {
     private _buildingQueue: BuildQueue;
     // army
@@ -18,6 +19,7 @@ export default class Village {
 
     public buildingStore : BuildingsStore;
     public api: TravianAPI;
+    public user: User;
     public id: number;
     public isActive : boolean;
     public name : string;
@@ -26,12 +28,12 @@ export default class Village {
             Object.assign(this, obj);
             const {api} = obj;
             this.buildingStore = new BuildingsStore();
-            this._buildingQueue = new BuildQueue(this);
+            this._buildingQueue = new BuildQueue(this, this.user.lock);
         }
 
     }
 
-    GetBuildingsQueue(){
+    getBuildingsQueue(){
        return this._buildingQueue; 
     }
 

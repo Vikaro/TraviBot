@@ -1,20 +1,22 @@
 import * as Queue from 'better-queue';
 import QueueTask from '../model/queue/QueueTask';
-import Time from '../utility/Duration';
+import Time, { delay } from '../utility/Duration';
 import Building from '../model/Building';
 import TravianAPI from '../TravianAPI';
-import { stat } from 'fs';
 
 import { BuildBuilding } from '../services/buildingsService'
 import Village from '../model/Village';
-var readline = require('readline');
+import { changeVillage } from '../services/villageService';
+import * as AsyncLock from 'async-lock';
 
 export default class BuildQueue {
     private queue: Queue;
-    private _village : Village;
-    constructor(village : Village) {
+    private _village: Village;
+    private _lock: AsyncLock;
+    constructor(village: Village, lock: AsyncLock) {
+        this._lock = lock;
         this._village = village;
-        this.queue = new Queue(this.process, { maxRetries: 10, retryDelay: 10000 });
+        this.queue = new Queue(this.process, { maxRetries: 10, retryDelay: 1000 });
         this.queue.on('task_finish', function (taskId, result, stats) {
             // taskId = 1, result: 3, stats = { elapsed: <time taken> }
             // taskId = 2, result: 5, stats = { elapsed: <time taken> }
@@ -26,9 +28,10 @@ export default class BuildQueue {
 
         })
     }
-
+    
     process = function (data: QueueTask, done: Queue.ProcessFunctionCb<any>) {
         console.log(data);
+
         data.Run().then((res) => {
             console.log("finished", res);
             done(null, res);
@@ -38,28 +41,39 @@ export default class BuildQueue {
         })
     }
 
-    addNewBuilding = (building: Building, callback? : () => void) => {
+    addNewBuilding = (building: Building, callback?: () => void, onError?: (building: Building) => void) => {
 
-        var task = new QueueTask(() => new Promise(async (resolve, reject) => {
-            // await BuildBuilding(building).then(updatedBuilding => {
-            //     const {duration} = updatedBuilding;
-            //     this.delay(duration).then(response => {
-            //         resolve(updatedBuilding);
-            //     }).catch(error => {
-            //         reject(error);
-            //     });
-            // }).catch(error => {
-            //     reject(error);
-            // });
+        var task = new QueueTask(`${building.name} ${building.level}`,() => new Promise(async (resolve, reject) => {
+            let updatedBuilding: Building, duration;
             try {
-                const updatedBuilding = await BuildBuilding(building);
-                this._village.buildingStore.AddBuildings([updatedBuilding]);
-                const { duration } = updatedBuilding;
-                const response = await this.delay(duration);
-                callback();
+                await this._lock.acquire("buildQueue", async (done) => {
+                    try {
+                        console.log(`village ${this._village.name} aquired lock`);
+                        if (!this._village.isActive) await changeVillage(this._village)
+                        // const changeVillageResponse = !this._village.isActive ?  : "this is active village";
+                        // console.log(changeVillageResponse);
+                        console.log(`try to build ${building.name}`)
+                        updatedBuilding = await BuildBuilding(building);
+                        // console.log(updatedBuilding);
+                        this._village.buildingStore.addBuildings([updatedBuilding]);
+                        duration = updatedBuilding.duration;
+                        // done();
+                    } catch (error) {
+                        console.error(error);
+                    } finally{
+                        done();
+                    }
+                  
+                });
+                const response = await delay(duration);
+                if (callback) await callback();
                 resolve(updatedBuilding);
             } catch (error) {
                 console.log(error.description);
+                if (onError) onError(updatedBuilding);
+                if (callback) await callback();
+
+                // resolve(updatedBuilding);
                 reject(error);
             }
 
@@ -68,31 +82,12 @@ export default class BuildQueue {
         console.log("Added new building to queue");
     }
 
-    delay = (time: string) => {
-        return new Promise((resolve, reject) => {
-            if (time == null) reject("duration error");
-            const due = new Time(time);
-            const timeLeft = new Time("0:0:0");
-
-            const intervalId = setInterval(() => {
-                readline.clearLine(process.stdout, 0);
-                readline.cursorTo(process.stdout, 0, null);
-                process.stdout.write(`${timeLeft.GetString()} / ${due.GetString()}`);
-                timeLeft.AddSeconds(1);
-            }, 1000);
-            setTimeout(() => {
-                clearInterval(intervalId);
-                resolve()
-            }, due.GetMiliseconds());
-        })
-    }
+   
 
     addExistingBuilding = async (building: Building) => {
-        const task = new QueueTask(() => this.delay(building.duration));
+        const task = new QueueTask(`${building.name} ${building.level}`, () => delay(building.duration));
         this.queue.push(task);
         console.log("Added existing building to queue");
     }
-
-
 
 }

@@ -4,21 +4,29 @@ import * as superagentCheerio from 'superagent-cheerio';
 import * as $ from 'cheerio';
 import Building from './model/Building';
 import BuildingsStore from './model/BuildingsStore';
-import { ParseBuildings, ParseActualQueue, ParseBuildingPage } from './parser/TravianParser';
+import { parseVillageBuildings, parseActualQueue, parseBuildingPage } from './parser/TravianParser';
 // import { BuildingsDb } from './db';
 import { exportToJsonFile } from './utility/file';
 
 const Settings = {
-    url: "http://www.x1000.aspidanetwork.com",
+    url: "http://www.x1000000.aspidanetwork.com",
     login: "vikaro",
     password: 'jc*a5cv#KJ5RqbYU9$gB'
 }
 
+export const BuildingsCategories = {
+    INFRASTRUCTURE: 1,
+    MILITARY: 2,
+    RESOURCES: 3
+}
 
 export default class TravianAPI {
 
     private serverUrl;
     private resourceUrl = "/dorf1.php";
+    private buildUrl = "/build.php?";
+    private adventureUrl = '/hero_adventure.php'
+    private adventureStart= '/a2b.php'
 
     private agent: request.SuperAgentStatic;
 
@@ -28,17 +36,15 @@ export default class TravianAPI {
             .set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
             .type('form');
     }
+    AdventuresPage = async () => await this.agent.get(this.serverUrl + this.adventureUrl);
+    AdventureStart = async (adventureId) => await this.agent.post(this.serverUrl + this.adventureStart).type('form').send("a=adventure").send('c=6').send('id=39').send(`h=${adventureId}`);
+    BuildNewBuildingPage = async (placeId, category) => await this.agent.get(this.serverUrl + this.buildUrl + `id=${placeId}&category=${category}`);
+    BuildingPage = async (building: Building) => await this.agent.get(this.serverUrl + "/" + building.url)
 
-    BuildingPage = async (building: Building) => {
-        return await this.agent.get(this.serverUrl + "/" + building.url)
-    }
-
-    BuildingUpgrade = async (building: Building) => {
-        return await this.agent.get(encodeURI(this.serverUrl + "/" + building.upgradeUrl));
-    }
-    LoginPage = async() => await this.agent.get(this.serverUrl);
-    ResourcesPage = async() => await this.agent.get(this.serverUrl + this.resourceUrl )
-
+    BuildingUpgrade = async (building: Building) => await this.agent.get(encodeURI(this.serverUrl + "/" + building.upgradeUrl))
+    LoginPage = async () => await this.agent.get(this.serverUrl);
+    ResourcesPage = async () => await this.agent.get(this.serverUrl + this.resourceUrl)
+    changeVillage = async (villageId) => await this.agent.get(this.serverUrl + this.resourceUrl + '?newdid=' + villageId)
     BuildBuilding = async (building: Building) => {
 
         let newBuilding = await this.agent.get(this.serverUrl + "/" + building.url).then(res => {
@@ -46,7 +52,7 @@ export default class TravianAPI {
             return res;
         })
             // .use(superagentCheerio)
-            .then(ParseBuildingPage);
+            .then(parseBuildingPage);
 
         newBuilding.url = building.url;
 
@@ -108,14 +114,14 @@ export default class TravianAPI {
         }
     }
 
-    GetVillageBuildings = async (): Promise<Building[]> => {
+    getVillageBuildings = async (): Promise<Building[]> => {
         return await this.agent.get(this.serverUrl + "/dorf2.php")
             .use(superagentCheerio)
             .then((res) => {
                 // exportToJsonFile(res, "getVillageBuildings");
                 // @ts-ignore
-                var $areas = res.$('#village_map area');
-                var buildings: Building[] = $areas.map(ParseBuildings).get();
+
+                var buildings: Building[] = parseVillageBuildings(res);
                 return buildings;
             })
     }

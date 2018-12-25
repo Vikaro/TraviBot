@@ -1,3 +1,5 @@
+var readline = require('readline');
+
 export default class Duration {
     constructor(duration) {
         var splitted = duration.split(":");
@@ -26,4 +28,24 @@ export default class Duration {
         return ((this.Hours * 60 + this.Minutes) * 60 + this.Seconds) * 1000;
     }
     GetString = () => `${this.Hours}:${this.Minutes}:${this.Seconds}`;
+}
+
+
+export const delay = (time: string) => {
+    return new Promise((resolve, reject) => {
+        if (time == null) reject("duration error");
+        const due = new Duration(time);
+        const timeLeft = new Duration("0:0:0");
+
+        const intervalId = setInterval(() => {
+            readline.clearLine(process.stdout, 0);
+            readline.cursorTo(process.stdout, 0, null);
+            process.stdout.write(`${timeLeft.GetString()} / ${due.GetString()}`);
+            timeLeft.AddSeconds(1);
+        }, 1000);
+        setTimeout(() => {
+            clearInterval(intervalId);
+            resolve()
+        }, due.GetMiliseconds());
+    })
 }

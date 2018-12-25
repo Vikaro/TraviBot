@@ -1,0 +1,1808 @@
+"<!DOCTYPE html>
+<html>
+<head>
+    <title>Aspida x1.000</title>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="favicon.ico"/>
+    <meta name="content-language" content="en" />
+        <link href="gpack/delusion_4.5/lang/en/compact.css" rel="stylesheet" type="text/css" />
+            <link href="gpack/delusion_4.5/en/compact-lowres.css" rel="stylesheet" type="text/css" />
+        <link href="gpack/delusion_4.5/lang/en/lang.css" rel="stylesheet" type="text/css" />
+    <link href="gpack/delusion_4.5/lang/en/modal_plus.css" rel="stylesheet" type="text/css" />
+    <link href="gpack/delusion_4.5/lang/en/custom.css" rel="stylesheet" type="text/css" />
+        <script src="gpack/delusion_4.5/lang/en/js/jquery.js" type="text/javascript"></script>
+    <script type="text/javascript">var j$ = $.noConflict();</script>
+            <script type="text/javascript">
+        window.TravianDefaults = Object.assign(
+            {"Map":{"Size":{"width":401,"height":401,"left":-200,"right":200,"bottom":-200,"top":200}}},
+            false || {}
+        );
+        </script>
+        <script type="text/javascript" src="gpack/delusion_4.5/lang/en/js/crypt-lowres.js?v=1544947200"></script>
+        <script type="text/javascript">
+        Travian.Translation.add(
+            {
+                'allgemein.anleitung':  'reference',
+                'allgemein.cancel': 'Cancel',
+                'allgemein.ok': 'ОК',
+                'allgemein.close':  'Close',
+                'cropfinder.keine_ergebnisse': 'Nothing has been found'
+            });
+        Travian.applicationId = 'T4.4 Game';
+        Travian.Game.version = '4.4';
+        Travian.Game.worldId = 'rux18';
+        Travian.Game.speed = 1000;
+
+        Travian.Templates = {};
+        Travian.Templates.ButtonTemplate = "<button >\n\t<div class=\"button-container addHoverClick\">\n\t\t<div class=\"button-background\">\n\t\t\t<div class=\"buttonStart\">\n\t\t\t\t<div class=\"buttonEnd\">\n\t\t\t\t\t<div class=\"buttonMiddle\"><\/div>\n\t\t\t\t<\/div>\n\t\t\t<\/div>\n\t\t<\/div>\n\t\t<div class=\"button-content\"><\/div>\n\t<\/div>\n<\/button>\n";
+
+        Travian.Game.eventJamHtml = '&lt;a href=&quot;http://t4.answers.travian.com/index.php?aid=252#go2answer&quot; target=&quot;blank&quot; title=&quot;Help with in game events&quot;&gt;&lt;span class=&quot;c0 t&quot;&gt;0:00:0&lt;/span&gt;?&lt;/a&gt;'.unescapeHtml();
+
+        window.addEvent('domready', function() {
+            Travian.Form.UnloadHelper.message = 'There were some changes made. Are you sure you want to leave this page?';
+        });
+    </script>
+
+</head><body class="v35 chrome hero_adventure perspectiveResources">
+<script type="text/javascript">
+    window.ajaxToken = 'de3768730d5610742b5245daa67b12cd';
+</script>
+<div id="background">
+    <div id="headerBar"></div>
+    <div id="bodyWrapper">
+
+        <div id="header">
+
+            
+<a id="logo" href="http://www.x1000.aspidanetwork.com/" target="_blank" title="Aspida x1.000||"></a>
+<ul id="navigation">
+<li id="n1" class="villageResources">
+	<a class=" active" href="/dorf1.php" accesskey="1" title="Resource||"></a>
+</li>
+<li id="n2" class="villageBuildings">
+	<a class=" inactive" href="/dorf2.php" accesskey="2" title="Village Center||"></a>
+</li>
+<li id="n3" class="map">
+	<a href="/karte.php" accesskey="3" title="Map||"></a>
+</li>
+<li id="n4" class="statistics">
+	<a  href="/statistiken.php" accesskey="4" title="Statistics||"></a>
+</li>
+    <li id="n5" class="reports">
+        <a href="/berichte.php" accesskey="5" title="Reports|| New reports: : 90"></a>
+        <div class="speechBubbleContainer ">
+			<div class="speechBubbleBackground">
+				<div class="start">
+					<div class="end">
+						<div class="middle"></div>
+					</div>
+				</div>
+			</div>
+			<div class="speechBubbleContent">90</div>
+		</div>    </li>
+    <li id="n6" class="messages">
+        <a href="/nachrichten.php" accesskey="6" title="Messages|| New Messages: 0"></a>
+            </li>
+<li id="n7" class="gold">
+		<a href="#" accesskey="7" onclick="window.fireEvent('startPaymentWizard', {}); this.blur(); return false;" class=""></a>
+	</li>
+</ul>
+
+
+<script type="text/javascript">
+	function ShopUIV2() {
+		this.allowSlidePackages = true;
+		this.allowSlidePaymentMethods = true;
+		this.goldPackagesPages = [];
+		this.goldPackagesPagesSize = 0;
+		this.paymentMethodsPages = [];
+		this.paymentMethodsPageSize = 0;
+		this.selectedPaymentMethod = false;
+		this.rtl = false;
+		this.initialize = function () {
+			var b = this;
+			if ($$(".paymentWizardDirectionRTL").length > 0) {
+				this.rtl = true
+			}
+			this.slidingContentInnerPackage = $$("#packageSlider .slidingContentInner")[0];
+			b.slidingContentOuterPackage = $$("#packageSlider .slidingContentOuter")[0];
+			b.slidingContentOuterWidthPackage = b.slidingContentOuterPackage.getDimensions();
+			b.slidingContentOuterWidthPackage = parseInt(b.slidingContentOuterWidthPackage.x);
+			b.slidingContentInnerPackage.set("tween", {
+				duration: 500,
+				transition: "linear",
+				link: "cancel",
+				onComplete: function () {
+					b.allowSlidePackages = true
+				}
+			});
+			this.slidingContentInnerPaymentMethods = $$("#paymentMethodsSlider .slidingContentInner")[0];
+			b.slidingContentOuterPaymentMethods = $$("#paymentMethodsSlider .slidingContentOuter")[0];
+			b.slidingContentOuterWidthPaymentMethods = b.slidingContentOuterPaymentMethods.getDimensions();
+			b.slidingContentOuterWidthPaymentMethods = parseInt(b.slidingContentOuterWidthPaymentMethods.x);
+			b.slidingContentInnerPaymentMethods.set("tween", {
+				duration: 500,
+				transition: "linear",
+				link: "cancel",
+				onComplete: function () {
+					b.allowSlidePaymentMethods = true
+				}
+			});
+			var a = 0;
+			$$("#packageSlider .productsPage").each(function (d) {
+				b.goldPackagesPages[a] = d;
+				if (b.goldPackagesPagesSize == 0) {
+					var c = d.getStyle("width");
+					c = parseInt(c.replace("px", ""));
+					b.goldPackagesPagesSize = c
+				}
+				a++
+			});
+			b.initializePaymentMethods();
+			setTimeout(function () {
+				b.packageSliderButtonCheck();
+				b.paymentMethodsSliderButtonCheck();
+				b.bindEvents();
+				b.updateResultBox();
+				setTimeout(function () {
+					$$("#packageSlider .package.hideForLoading").removeClass("hideForLoading")
+				}, 500)
+			}, 250)
+		};
+		this.initializePaymentMethods = function () {
+			var b = this;
+			$$("#paymentMethodsSlider .loading")[0].removeClass("hide");
+			var a = parseInt($$(".package.selected input.goldProductId")[0].get("value"));
+			$$("#paymentMethodsSlider .slidingContent")[0].empty();
+			b.updateResultBox();
+			Travian.ajax({
+				data: {cmd: "paymentProviders", selectedPackage: a}, onSuccess: function (d) {
+					$$("#paymentMethodsSlider .slidingContent")[0].set("html", d.html);
+					if (!b.rtl) {
+						b.slidingContentInnerPaymentMethods.setStyle("margin-left", 0)
+					} else {
+						b.slidingContentInnerPaymentMethods.setStyle("margin-right", 0)
+					}
+					b.paymentMethodsPages = [];
+					b.paymentMethodsPageSize = 0;
+					var c = 0;
+					$$(".methodsPage").each(function (f) {
+						b.paymentMethodsPages[c] = f;
+						if (b.paymentMethodsPageSize == 0) {
+							var e = f.getStyle("width");
+							e = parseInt(e.replace("px", ""));
+							b.paymentMethodsPageSize = e
+						}
+						c++
+					});
+					$$("#paymentMethodsSlider .methodItem").each(function (g) {
+						g.addEvent("click", b.methodItemClickEvent);
+						if (b.selectedPaymentMethod !== false) {
+							if (parseInt(g.getChildren()[0].get("value")) == b.selectedPaymentMethod) {
+								$$("#paymentMethodsSlider .methodItem").removeClass("selected");
+								g.addClass("selected");
+								for (var e = 0; e < b.paymentMethodsPages.length; e++) {
+									if (b.paymentMethodsPages[e] == g.getParent()) {
+										var f = e * b.paymentMethodsPageSize;
+										if (f == 0) {
+											f = 1
+										}
+										b.allowSlidePaymentMethods = false;
+										$$("#paymentMethodsSlider .methodsPage").removeClass("visible").addClass("hidden");
+										b.paymentMethodsPages[e].removeClass("hidden").addClass("visible");
+										if (!b.rtl) {
+											b.slidingContentInnerPaymentMethods.tween("margin-left", f * -1)
+										} else {
+											b.slidingContentInnerPaymentMethods.tween("margin-right", f * -1)
+										}
+										b.updateResultBox()
+									}
+								}
+							}
+						}
+					});
+					b.paymentMethodsSliderButtonCheck();
+					$$("#paymentMethodsSlider .loading")[0].addClass("hide")
+				}
+			})
+		};
+		this.packageSliderButtonCheck = function () {
+			var a = this;
+			if (typeof a.goldPackagesPages[0] != "undefined") {
+				if (a.goldPackagesPages[0].hasClass("visible")) {
+					if (!$$("#packageSlider .slideArea.area1")[0].hasClass("inactive")) {
+						$$("#packageSlider .slideArea.area1")[0].addClass("inactive")
+					}
+				} else {
+					$$("#packageSlider .slideArea.area1")[0].removeClass("inactive")
+				}
+				if (a.goldPackagesPages[a.goldPackagesPages.length - 1].hasClass("hidden")) {
+					if ($$("#packageSlider .slideArea.area2")[0].hasClass("inactive")) {
+						$$("#packageSlider .slideArea.area2")[0].removeClass("inactive")
+					}
+				} else {
+					$$("#packageSlider .slideArea.area2")[0].addClass("inactive")
+				}
+			}
+		};
+		this.paymentMethodsSliderButtonCheck = function () {
+			var a = this;
+			if (typeof a.paymentMethodsPages[0] != "undefined") {
+				if (a.paymentMethodsPages[0].hasClass("visible")) {
+					if (!$$("#paymentMethodsSlider .slideArea.area1")[0].hasClass("inactive")) {
+						$$("#paymentMethodsSlider .slideArea.area1")[0].addClass("inactive")
+					}
+				} else {
+					$$("#paymentMethodsSlider .slideArea.area1")[0].removeClass("inactive")
+				}
+				if (a.paymentMethodsPages[a.paymentMethodsPages.length - 1].hasClass("hidden")) {
+					if ($$("#paymentMethodsSlider .slideArea.area2")[0].hasClass("inactive")) {
+						$$("#paymentMethodsSlider .slideArea.area2")[0].removeClass("inactive")
+					}
+				} else {
+					$$("#paymentMethodsSlider .slideArea.area2")[0].addClass("inactive")
+				}
+			}
+		};
+		this.bindEvents = function () {
+			var a = this;
+			$$("#packageSlider .slideArea.area1").addEvent("click", function () {
+				a.packageSlideLeft()
+			});
+			$$("#packageSlider .slideArea.area2").addEvent("click", function () {
+				a.packageSlideRight()
+			});
+			$$("#packageSlider .package").addEvent("click", function () {
+				if (!this.hasClass("selected")) {
+					$$(".package").removeClass("selected");
+					this.addClass("selected");
+					a.initializePaymentMethods()
+				}
+			});
+			$$("#phonePackages .package").addEvent("click", function () {
+				if (!this.hasClass("selected")) {
+					$$(".package").removeClass("selected");
+					this.addClass("selected");
+					a.initializePaymentMethods()
+				}
+			});
+			$$("#paymentMethodsSlider .slideArea.area1").addEvent("click", function () {
+				a.paymentMethodsSlideLeft()
+			});
+			$$("#paymentMethodsSlider .slideArea.area2").addEvent("click", function () {
+				a.paymentMethodsSlideRight()
+			});
+			$$("#paymentMethodsSlider .methodItem").addEvent("click", a.methodItemClickEvent);
+			$$("#paymentMethodsSlider").addEvent("click", function () {
+				a.updateResultBox();
+				a.saveSelectedPaymentMethod()
+			});
+			$$("#overview .resultBox .activeButton").addEvent("click", function () {
+				a.buyNowAction()
+			});
+			$$(".buyGoldLocation").addEvent("change", function () {
+				a.changeLocation()
+			});
+			$$("#vouchers .package").addEvent("click", function () {
+				voucherPopup()
+			})
+		};
+		this.methodItemClickEvent = function () {
+			if (!this.hasClass("inactive") && !this.hasClass("defect")) {
+				$$("#paymentMethodsSlider .methodItem").removeClass("selected");
+				this.addClass("selected")
+			}
+		};
+		this.updateResultBox = function () {
+			$$(".resultBox #packageGoldAmount .goldUnits")[0].set("html", $$(".package.selected .goldUnits")[0].get("html"));
+			$$(".resultBox #goldBalanceNew")[0].set("html", (parseInt($$(".package.selected .goldUnits")[0].get("html")) + parseInt($$(".accountBalance span")[0].get("html"))));
+			$$(".resultBox #priceToPay")[0].set("html", $$(".package.selected .price")[0].get("html"));
+			if ($$("#paymentMethodsSlider .methodItem.selected")[0]) {
+				$$(".resultBox .inactiveButton").addClass("hide");
+				$$(".resultBox .activeButton").removeClass("hide")
+			} else {
+				$$(".resultBox .activeButton").addClass("hide");
+				$$(".resultBox .inactiveButton").removeClass("hide")
+			}
+		};
+		this.saveSelectedPaymentMethod = function () {
+			var a = this;
+			if ($$("#paymentMethodsSlider .methodItem.selected")[0]) {
+				a.selectedPaymentMethod = parseInt($$("#paymentMethodsSlider .methodItem.selected input.providerId")[0].get("value"))
+			}
+		};
+		this.packageSlideLeft = function () {
+			var g = this;
+			if (g.allowSlidePackages) {
+				var f = "";
+				var a = "";
+				var b = false;
+				for (var c = g.goldPackagesPages.length - 1; c >= 0; c--) {
+					if (g.goldPackagesPages[c].hasClass("visible")) {
+						f = g.goldPackagesPages[c];
+						b = true
+					}
+					if (b && g.goldPackagesPages[c].hasClass("hidden")) {
+						a = g.goldPackagesPages[c];
+						break
+					}
+				}
+				if (a != "") {
+					var e = 0;
+					if (!g.rtl) {
+						e = g.slidingContentInnerPackage.getStyle("margin-left")
+					} else {
+						e = g.slidingContentInnerPackage.getStyle("margin-right")
+					}
+					e = parseInt(e.replace("px", ""));
+					var d = (e + g.goldPackagesPagesSize);
+					if (d == 0) {
+						d = 1
+					}
+					f.removeClass("visible").addClass("hidden");
+					a.removeClass("hidden").addClass("visible");
+					g.allowSlidePackages = false;
+					if (!g.rtl) {
+						g.slidingContentInnerPackage.tween("margin-left", d)
+					} else {
+						g.slidingContentInnerPackage.tween("margin-right", d)
+					}
+				}
+			}
+			g.packageSliderButtonCheck()
+		};
+		this.packageSlideRight = function () {
+			var g = this;
+			if (g.allowSlidePackages) {
+				var f = "";
+				var a = "";
+				var b = false;
+				for (var c = 0; c < g.goldPackagesPages.length; c++) {
+					if (g.goldPackagesPages[c].hasClass("visible")) {
+						f = g.goldPackagesPages[c];
+						b = true
+					}
+					if (g.goldPackagesPages[c].hasClass("hidden")) {
+						if (b) {
+							a = g.goldPackagesPages[c];
+							break
+						}
+					}
+				}
+				if (a != "") {
+					var e = 0;
+					if (!g.rtl) {
+						e = g.slidingContentInnerPackage.getStyle("margin-left")
+					} else {
+						e = g.slidingContentInnerPackage.getStyle("margin-right")
+					}
+					e = parseInt(e.replace("px", "")) * -1;
+					var d = (e + g.goldPackagesPagesSize) * -1;
+					f.removeClass("visible").addClass("hidden");
+					a.removeClass("hidden").addClass("visible");
+					g.allowSlidePaymentMethods = false;
+					if (!g.rtl) {
+						g.slidingContentInnerPackage.tween("margin-left", d)
+					} else {
+						g.slidingContentInnerPackage.tween("margin-right", d)
+					}
+				}
+			}
+			g.packageSliderButtonCheck()
+		};
+		this.paymentMethodsSlideLeft = function () {
+			var g = this;
+			if (g.allowSlidePaymentMethods) {
+				var f = "";
+				var a = "";
+				var b = false;
+				for (var c = g.paymentMethodsPages.length - 1; c >= 0; c--) {
+					if (g.paymentMethodsPages[c].hasClass("visible")) {
+						f = g.paymentMethodsPages[c];
+						b = true
+					}
+					if (b && g.paymentMethodsPages[c].hasClass("hidden")) {
+						a = g.paymentMethodsPages[c];
+						break
+					}
+				}
+				if (a != "") {
+					var e = 0;
+					if (!g.rtl) {
+						e = g.slidingContentInnerPaymentMethods.getStyle("margin-left")
+					} else {
+						e = g.slidingContentInnerPaymentMethods.getStyle("margin-right")
+					}
+					e = parseInt(e.replace("px", ""));
+					var d = (e + g.paymentMethodsPageSize);
+					if (d == 0) {
+						d = 1
+					}
+					f.removeClass("visible").addClass("hidden");
+					a.removeClass("hidden").addClass("visible");
+					g.allowSlidePaymentMethods = false;
+					if (!g.rtl) {
+						g.slidingContentInnerPaymentMethods.tween("margin-left", d)
+					} else {
+						g.slidingContentInnerPaymentMethods.tween("margin-right", d)
+					}
+				}
+			}
+			g.paymentMethodsSliderButtonCheck()
+		};
+		this.paymentMethodsSlideRight = function () {
+			var g = this;
+			if (g.allowSlidePaymentMethods) {
+				var f = "";
+				var a = "";
+				var b = false;
+				for (var c = 0; c < g.paymentMethodsPages.length; c++) {
+					if (g.paymentMethodsPages[c].hasClass("visible")) {
+						f = g.paymentMethodsPages[c];
+						b = true
+					}
+					if (g.paymentMethodsPages[c].hasClass("hidden")) {
+						if (b) {
+							a = g.paymentMethodsPages[c];
+							break
+						}
+					}
+				}
+				if (a != "") {
+					var e = 0;
+					if (!g.rtl) {
+						e = g.slidingContentInnerPaymentMethods.getStyle("margin-left")
+					} else {
+						e = g.slidingContentInnerPaymentMethods.getStyle("margin-right")
+					}
+					e = parseInt(e.replace("px", "")) * -1;
+					var d = (e + g.paymentMethodsPageSize) * -1;
+					f.removeClass("visible").addClass("hidden");
+					a.removeClass("hidden").addClass("visible");
+					g.allowSlidePaymentMethods = false;
+					if (!g.rtl) {
+						g.slidingContentInnerPaymentMethods.tween("margin-left", d)
+					} else {
+						g.slidingContentInnerPaymentMethods.tween("margin-right", d)
+					}
+				}
+			}
+			g.paymentMethodsSliderButtonCheck()
+		};
+		this.buyNowAction = function () {
+			if ($$("#overview .resultBox .inactiveButton.hide")[0]) {
+				var e = parseInt($$(".package.selected input.goldProductId")[0].get("value"));
+				var b = parseInt($$("#paymentMethodsSlider .methodItem.selected input.providerId")[0].get("value"));
+				var d = 800;
+				var f = 600;
+				if ($$("#paymentMethodsSlider .methodItem.selected input.popupWidth")[0]) {
+					d = $$("#paymentMethodsSlider .methodItem.selected input.popupWidth")[0]
+				}
+				if ($$("#paymentMethodsSlider .methodItem.selected input.popupHeight")[0]) {
+					f = $$("#paymentMethodsSlider .methodItem.selected input.popupHeight")[0]
+				}
+				var a = (screen.width - d) / 2;
+				var c = (screen.height - f) / 2;
+				window.open("/tgpay.php?product=" + e + "&provider=" + b, "tgpay", "scrollbars=yes,status=yes,resizable=yes,toolbar=yes,width=" + d + ",height=" + f + ",left=" + a + ",top=" + c)
+			}
+		};
+		this.changeLocation = function () {
+			var a = $$("select.buyGoldLocation")[0].getSelected()[0].get("value");
+			window.fireEvent("startPaymentWizard", {
+				data: {
+					cmd: "paymentWizard",
+					goldProductId: "",
+					goldProductLocation: a,
+					location: "",
+					activeTab: "buyGold",
+					formData: {}
+				}
+			})
+		};
+		this.selectPackage = function (e) {
+			var d = this;
+			var f = $$(".package input[value=" + e + "]")[0];
+			e = f.getParent();
+			var a = e.getParent();
+			if (a.id != "phonePackages") {
+				if (a.hasClass("hidden")) {
+					for (var b = 0; b < d.goldPackagesPages.length; b++) {
+						if (d.goldPackagesPages[b] == a) {
+							var c = b * d.goldPackagesPagesSize;
+							if (c == 0) {
+								c = 1
+							}
+							d.allowSlidePackages = false;
+							$$("#packageSlider .productsPage").removeClass("visible").addClass("hidden");
+							d.goldPackagesPages[b].removeClass("hidden").addClass("visible");
+							if (!d.rtl) {
+								d.slidingContentInnerPackage.tween("margin-left", c * -1)
+							} else {
+								d.slidingContentInnerPackage.tween("margin-right", c * -1)
+							}
+						}
+					}
+				}
+			}
+			$$(".package").removeClass("selected");
+			e.addClass("selected")
+		}
+	}
+</script>
+<script type="text/javascript">
+	window.addEvent('domready', function()
+	{
+		Travian.Game.Layout.goldButtonAnimation();
+	});
+</script><div id="goldSilver">
+	<div class="gold">
+		<img src="img/x.gif" alt="Gold" title="Gold" class="gold"  />
+		<span id="ajaxReplaceableGoldAmount_2" class="ajaxReplaceableGoldAmount">643</span>
+	</div>
+	<div class="silver">
+		<a href="hero_auction.php"><img src="img/x.gif" alt="Silver" title="Silver" class="silver" /></a>
+		<span class="ajaxReplaceableSilverAmount">1166</span>
+	</div>
+</div>
+	<ul id="outOfGame" class="RTL">
+			<li class="profile">
+			<a href="spieler.php">
+				<img src="img/x.gif" alt="????? ???????">
+			</a>
+		</li>
+	<li class="options">
+						<a href="options.php">
+					<img src="img/x.gif" alt="??????">
+				</a>
+				</li>
+		<li class="help">
+			<a href="help.php">
+				<img src="img/x.gif" alt="Help">
+			</a>
+		</li>
+       
+		<li class="logout ">
+			<a href="logout.php">
+				<img src="img/x.gif" alt="Logout">
+			</a>
+		</li>
+
+		<li class="clear">&nbsp;</li>
+		
+		
+	</ul>
+
+	
+	<script type="text/javascript">
+	$$('#outOfGame li.logout a').addEvent('click', function(){
+		Travian.WindowManager.getWindows().each(function($dialog){
+			Travian.WindowManager.unregister($dialog);
+		});
+	});
+	</script>
+
+
+
+
+        </div>
+        <div id="center">
+
+
+            
+
+
+<div id="sidebarBeforeContent" class="sidebar beforeContent">
+<div id="sidebarBoxHero" class="sidebarBox toggleable collapsed ">
+    <div class="sidebarBoxBaseBox">
+        <div class="baseBox baseBoxTop">
+            <div class="baseBox baseBoxBottom">
+                <div class="baseBox baseBoxCenter"></div>
+            </div>
+        </div>
+    </div>
+    <div class="sidebarBoxInnerBox">
+        <div class="innerBox header ">
+            <button id="heroImageButton" onclick="window.location.href='hero_inventory.php';" class="heroImageButton " type="button" title="Hero overview||Hero is currently in village: Athkatla.">
+                <img class="heroImage" src="hcache/64x82/2876143513.png" width="64px" height="83px" style="margin-left:10px;margin-top:5px;" alt="">
+            </button>
+                                    <div class="playerName">
+                <img src="img/x.gif" class="nation nation1" alt="Romans" title="Romans">vikaro</div>
+            <button type="button" id="button5225ee283b159" class="layoutButton auctionWhite green  " onclick="return false;" title="">
+                <div class="button-container addHoverClick ">
+                    <img src="img/x.gif" alt="">
+                </div>
+            </button>
+
+            <script type="text/javascript">
+                
+
+                if($('button5225ee283b159'))
+                {
+                    $('button5225ee283b159').addEvent('click', function ()
+                    {
+                        window.fireEvent('buttonClicked', [this, {"type":"green","onclick":"return false;","loadTitle":true,"boxId":"hero","disabled":false,"speechBubble":"","class":"","id":"button5225ee283b159","redirectUrl":"hero_auction.php","redirectUrlExternal":""}]);
+                    });
+                }
+            </script>
+                        <button type="button" id="button5225ee283b28a" class="layoutButton adventureWhite green  "  title="Adventure:||Available adventures: 13" onclick="return false;">
+                <div class="button-container addHoverClick ">
+                    <img src="img/x.gif" alt="">
+                </div>
+                                    <div class="speechBubbleContainer ">
+                        <div class="speechBubbleBackground">
+                            <div class="start">
+                                <div class="end">
+                                    <div class="middle"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="speechBubbleContent">13</div>
+                    </div>
+                                <div class="clear"></div>   </button>
+
+            <script type="text/javascript">
+
+                if($('button5225ee283b28a'))
+                {
+                    $('button5225ee283b28a').addEvent('click', function ()
+                    {
+                        window.fireEvent('buttonClicked', [this, {"type":"green","onclick":"return false;","loadTitle":true,"boxId":"hero","disabled":false,"speechBubble":"13","class":"","id":"button5225ee283b28a","redirectUrl":"hero_adventure.php","redirectUrlExternal":""}]);
+                    });
+                }
+            </script>       </div>
+
+        <div class="innerBox content">
+            <div class="heroStatusMessage">
+
+
+
+                <img alt="Hero is healthy" src="img/x.gif" class="heroStatus100">
+                in home village</div>
+
+            <div class="progressBars">
+                <div class="heroHealthBarBox alive" title="Health: 100%">
+                    <a href="hero_inventory.php">
+                        <img src="img/x.gif" class="injury" alt="Health">
+                    </a>
+                    <div class="bar" style="width:100%" >&nbsp;</div>
+                </div>
+
+                <div class="heroXpBarBox" title="Experience: 994">
+                    <a href="hero_inventory.php"><img src="img/x.gif" class="iExperience" ></a>
+                    <div class="bar" style="width:1%">&nbsp;</div>
+                </div>
+            </div>      </div>
+        <div class="innerBox footer">
+            <button type="button" class="toggle" onclick="" title="Hide information">
+                <div class="button-container addHoverClick ">
+                    <svg class="toggle-caret" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 45 32.9">
+	<style>
+		.caret{fill:url(#caret_to_bottom_fill); stroke:url(#caret_to_bottom_stroke);}
+	</style>
+	<linearGradient id="caret_to_bottom_fill" x1="22.4983" x2="22.4983" y1="26.6416" y2="8.0344" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1 0 0 -1 0 33.833)">
+		<stop offset=".1147" stop-color="#DADED4"></stop>
+		<stop offset=".1452" stop-color="#F9FBF7"></stop>
+		<stop offset=".1551" stop-color="#FFFFFF"></stop>
+	</linearGradient>
+
+	<linearGradient id="caret_to_bottom_stroke" x1="22.4983" x2="22.4983" y1="26.6416" y2="8.0344" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1 0 0 -1 0 33.833)">
+		<stop offset="0" stop-color="#7C9A58"></stop>
+		<stop offset=".2" stop-color="#60A200"></stop>
+		<stop offset=".4" stop-color="#63A500"></stop>
+		<stop offset="1" stop-color="#7DB211"></stop>
+	</linearGradient>
+	<path class="down_glow" d="M39 5.9c-.4-.5-1-.8-1.5-.9H7.4c-.6 0-1.1.2-1.5.9C5.5 6.3 5 7.7 5 9c0 .7 0 2.5.5 3.1l15.1 15.1c.4.5 1.3.7 1.9.7.6 0 1.5-.2 2-.7l14.9-15c.4-.5.6-2 .6-2.7.1-1.2-.5-3.4-1-3.6z"></path>
+	<path class="up_glow" d="M39.2,8.2c-0.4-0.5-1.6-1-2.1-1.1l-29.2,0c-0.6,0-1.6,0.4-2.1,1C5.4,8.6,5,9.7,5,11 c0,0.7,0.1,3.3,1.3,4.8l13,13.1c0.4,0.5,2.5,1,3.1,1c0.6,0,2.7-0.5,3.8-1.5L38.4,16c1.4-1.4,1.6-3.8,1.6-4.5 C40.1,10.3,39.9,8.7,39.2,8.2z"></path>
+	<path class="topshadow" d="M39.8 10.8c.5-1.7.1-5.7-2.5-5.8H7.2c-2.4.1-2.4 4.6-2.1 5.6 0 .1.2.1.2.1.8-.2.9-2 3.4-2.1 6.8-.1 22.1 0 28.5.1 2.6.1 2.1 1.9 2.6 2.1z"></path>
+	<path class="bottomshadow" d="M39.4,8.9C39,8.5,38.5,8.3,38,8.2L7.1,8.3C6.5,8.3,6,8.5,5.6,9C5.2,9.4,5,9.9,5,10.5 c0,0.6-0.2,3.6,1.7,5.6l12.7,12.8c1,0.7,2,1,3.1,1c1.1,0,2.7-0.6,3.8-1.5L38.4,16c1.9-2.1,1.6-5.1,1.6-5.7 C40.1,9.8,39.9,9.3,39.4,8.9z"></path>
+	<path class="caret" d="M38.3 8.8c-.4-.4-.9-.6-1.4-.7H8.1c-.6 0-1.1.2-1.5.7-.4.4-.6.9-.6 1.5s.2 1 .6 1.5L21 26.2c.4.4.9.6 1.5.6s1-.2 1.5-.6l14.3-14.5c.4-.4.6-.9.6-1.5.1-.5-.1-1-.6-1.4z"></path>
+</svg>                </div>
+            </button>
+
+            <script type="text/javascript">
+                window.addEvent('domready', function()
+                {
+                    Travian.Translation.add(
+                        {
+                            'hero_collapsed': 'Show additional information',
+                            'hero_expanded': 'Hide additional information'
+                        });
+
+                    var box = $('sidebarBoxHero');
+                    box.down('button.toggle').addEvent('click', function(e)
+                    {
+                        if (box.toggleClass('expanded').hasClass('expanded'))
+                        {
+                            document.cookie = 'box=1; expires=Wed, 1 Jan 2020 00:00:00 GMT';
+                        }
+                        else
+                        {
+                            document.cookie = 'box=0; expires=Thu, 01-Jan-1970 00:00:01 GMT';
+                        }
+                        Travian.Game.Layout.toggleBox(box, 'travian_toggle', 'hero');
+                    });
+
+                });
+            </script>
+        </div>
+    </div>
+</div>
+<div id="sidebarBoxAlliance" class="sidebarBox   ">
+    <div class="sidebarBoxBaseBox">
+        <div class="baseBox baseBoxTop">
+            <div class="baseBox baseBoxBottom">
+                <div class="baseBox baseBoxCenter"></div>
+            </div>
+        </div>
+    </div>
+        <div class="sidebarBoxInnerBox">
+        <div class="innerBox header ">
+            <button type="button" id="button5225ee283d5ac" class="layoutButton embassyWhite green "  title='Embassy || Highest embassy level: 20' onclick="window.location.href='build.php?id=28&newdid=25276'; return false;">
+                <div class="button-container addHoverClick">
+                    <img src="img/x.gif" alt="">
+                </div>
+            </button>
+
+
+<button type="button" id="button5225ee283d8f8" title="Alliance Review" class="layoutButton overviewWhite green disabled " onclick="return false;">
+                <div class="button-container addHoverClick ">
+                    <img src="img/x.gif" alt="">
+                </div>
+            </button>
+
+            <script type="text/javascript">
+
+                if($('button5225ee283d8f8'))
+                {
+                    $('button5225ee283d8f8').addEvent('click', function ()
+                    {
+                        window.fireEvent('buttonClicked', [this, {"type":"green","onclick":"return false;","loadTitle":false,"boxId":"alliance","disabled":true,"speechBubble":"","class":"","id":"button5225ee283d8f8","redirectUrl":"allianz.php?s=4","redirectUrlExternal":""}]);
+                    });
+                }
+            </script><div class="clear"></div>
+
+            <div class="boxTitle">
+                No alliance            </div>
+        </div>
+        <div class="innerBox content">
+        </div>
+        <div class="innerBox footer">
+        </div>
+    </div>
+</div>
+    <div id="sidebarBoxInfobox" class="sidebarBox toggleable expanded">
+        <div class="sidebarBoxBaseBox">
+            <div class="baseBox baseBoxTop">
+                <div class="baseBox baseBoxBottom">
+                    <div class="baseBox baseBoxCenter"></div>
+                </div>
+            </div>
+        </div>
+        <div class="sidebarBoxInnerBox">
+            <div class="innerBox header ">
+                <div class="boxTitle">Info box</div>
+                <span class="messageShortInfo">
+2                    ‎‭‭‬×‬‎<img class="messages" src="img/x.gif" alt="Total messages: 2">
+                </span>
+            </div>
+            <div class="innerBox content">
+                <ul><li><b>KIND REMINDER - MULTIACCOUNT IS FORBIDDEN</b> and results in ban</li></ul>
+                <ul>
+                    <li>From now on - accounts inactive for more than 7 days will be removed.</li>
+                </ul>
+
+                <ul>
+                                    </ul>
+                    <ul>
+<a href="/nachrichten.php?t=1&id=6">Report a problem</a>                    </ul>
+                <ul>
+                                    </ul>
+                <ul>
+                                    </ul>
+                <ul>
+                    <br /><b>Natars will start building in: <span id="timer3">89:16:59</span> </b><br /><br />                </ul>
+                <ul></ul>
+                <head>
+    <title>+1 Aspida: Basic page</title>
+    <link rel="canonical" href="http://www.aspidanetwork.com" />
+    <script src="https://apis.google.com/js/platform.js" async defer>
+    </script>
+  </head>
+  <body>
+    <g:plusone size="medium"></g:plusone>
+  </body>
+</html>
+            </div>
+
+            <div class="innerBox footer">
+                <button type="button" class="toggle" onclick="" title="Hide information">
+                    <div class="button-container addHoverClick " >
+                    <svg class="toggle-caret" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 45 32.9">
+	<style>
+		.caret{fill:url(#caret_to_bottom_fill); stroke:url(#caret_to_bottom_stroke);}
+	</style>
+	<linearGradient id="caret_to_bottom_fill" x1="22.4983" x2="22.4983" y1="26.6416" y2="8.0344" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1 0 0 -1 0 33.833)">
+		<stop offset=".1147" stop-color="#DADED4"></stop>
+		<stop offset=".1452" stop-color="#F9FBF7"></stop>
+		<stop offset=".1551" stop-color="#FFFFFF"></stop>
+	</linearGradient>
+
+	<linearGradient id="caret_to_bottom_stroke" x1="22.4983" x2="22.4983" y1="26.6416" y2="8.0344" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1 0 0 -1 0 33.833)">
+		<stop offset="0" stop-color="#7C9A58"></stop>
+		<stop offset=".2" stop-color="#60A200"></stop>
+		<stop offset=".4" stop-color="#63A500"></stop>
+		<stop offset="1" stop-color="#7DB211"></stop>
+	</linearGradient>
+	<path class="down_glow" d="M39 5.9c-.4-.5-1-.8-1.5-.9H7.4c-.6 0-1.1.2-1.5.9C5.5 6.3 5 7.7 5 9c0 .7 0 2.5.5 3.1l15.1 15.1c.4.5 1.3.7 1.9.7.6 0 1.5-.2 2-.7l14.9-15c.4-.5.6-2 .6-2.7.1-1.2-.5-3.4-1-3.6z"></path>
+	<path class="up_glow" d="M39.2,8.2c-0.4-0.5-1.6-1-2.1-1.1l-29.2,0c-0.6,0-1.6,0.4-2.1,1C5.4,8.6,5,9.7,5,11 c0,0.7,0.1,3.3,1.3,4.8l13,13.1c0.4,0.5,2.5,1,3.1,1c0.6,0,2.7-0.5,3.8-1.5L38.4,16c1.4-1.4,1.6-3.8,1.6-4.5 C40.1,10.3,39.9,8.7,39.2,8.2z"></path>
+	<path class="topshadow" d="M39.8 10.8c.5-1.7.1-5.7-2.5-5.8H7.2c-2.4.1-2.4 4.6-2.1 5.6 0 .1.2.1.2.1.8-.2.9-2 3.4-2.1 6.8-.1 22.1 0 28.5.1 2.6.1 2.1 1.9 2.6 2.1z"></path>
+	<path class="bottomshadow" d="M39.4,8.9C39,8.5,38.5,8.3,38,8.2L7.1,8.3C6.5,8.3,6,8.5,5.6,9C5.2,9.4,5,9.9,5,10.5 c0,0.6-0.2,3.6,1.7,5.6l12.7,12.8c1,0.7,2,1,3.1,1c1.1,0,2.7-0.6,3.8-1.5L38.4,16c1.9-2.1,1.6-5.1,1.6-5.7 C40.1,9.8,39.9,9.3,39.4,8.9z"></path>
+	<path class="caret" d="M38.3 8.8c-.4-.4-.9-.6-1.4-.7H8.1c-.6 0-1.1.2-1.5.7-.4.4-.6.9-.6 1.5s.2 1 .6 1.5L21 26.2c.4.4.9.6 1.5.6s1-.2 1.5-.6l14.3-14.5c.4-.4.6-.9.6-1.5.1-.5-.1-1-.6-1.4z"></path>
+</svg></div>
+                </button>
+                <script type="text/javascript">
+                    window.addEvent('domready', function()
+                    {
+                        Travian.Translation.add(
+                            {
+                                'infobox_collapsed': 'نشان دادن پیام',
+                                'infobox_expanded': 'نشان ندادن پیام'
+                            });
+
+                        var box = $('sidebarBoxInfobox');
+                        box.down('button.toggle').addEvent('click', function(e)
+                        {
+                            Travian.Game.Layout.toggleBox(box, 'travian_toggle', 'infobox');
+                        });
+                    });
+                </script>
+
+                <script type="text/javascript">
+                    window.addEvent('domready', function()
+                    {
+                        Travian.Game.Layout.setInfoboxItemsRead();
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+        <!-- New add start-->
+        <div class="sidebarBox   " id="sidebarBoxQuestachievements">
+            <div class="sidebarBoxBaseBox">
+                <div class="baseBox baseBoxTop">
+                    <div class="baseBox baseBoxBottom">
+                        <div class="baseBox baseBoxCenter"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="vote-box" class="sidebarBoxInnerBox">
+                <div class="innerBox header ">
+                    <div class="travianBirthdayRibbon">
+                        <div class="headline">
+                            Get free Gold   </div>
+                    </div>
+                    <div class="boxTitle">Vote</div>        </div>
+                <div class="innerBox content">
+                    <form>
+                        <div class="questAchievementContainer share_buttons">
+                            <button questbuttonoverviewachievements="1" class="green questButtonOverviewAchievements goldVote disabled large" value="Подробности" data-id="vote1" data-set="http://www.arena-top100.com/index.php?a=in&u=aspida&id=51x1000">
+                                <div class="button-container addHoverClick ">
+                                    <div class="button-background">
+                                        <div class="buttonStart">
+                                            <div class="buttonEnd">
+                                                <div class="buttonMiddle"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="button-content" id="vote1">Vote 1</div>
+                                </div>
+                            </button><br/>
+                            <button questbuttonoverviewachievements="1" class="green questButtonOverviewAchievements goldVote disabled large" value="Подробности" data-id="vote2" data-set="http://topg.org/travian-private-servers/in-409660-51x1000">
+                                <div class="button-container addHoverClick ">
+                                    <div class="button-background">
+                                        <div class="buttonStart">
+                                            <div class="buttonEnd">
+                                                <div class="buttonMiddle"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="button-content" id="vote2">Vote 2</div>
+                                </div>
+                            </button><br/>
+                            <button questbuttonoverviewachievements="1" class="green questButtonOverviewAchievements goldVote disabled large" value="Подробности" data-id="vote3" data-set="http://www.gtop100.com/topsites/Travian/sitedetails/Aspida-Servers-89726?vote=1&pingUsername=51x1000">
+                                <div class="button-container addHoverClick ">
+                                    <div class="button-background">
+                                        <div class="buttonStart">
+                                            <div class="buttonEnd">
+                                                <div class="buttonMiddle"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="button-content" id="vote3">Vote 3</div>
+                                </div>
+                            </button><br/>
+                            <button class="green questButtonOverviewAchievements disabled share_button" id="fbShareBtn">
+                                <div class="button-container addHoverClick ">
+                                    <div class="button-background">
+                                        <div class="buttonStart">
+                                            <div class="buttonEnd">
+                                                <div class="buttonMiddle"></div>
+                                            </div> 
+                                        </div>
+                                    </div>
+                                    <div class="button-content" id="share1" data-str="Share with FB"><img src="/gpack/delusion_4.5//img/Facebook-Share-Button.png" alt="Share with FB"/></div>
+                                </div>
+                                <script src="http://connect.facebook.net/en_US/all.js" type="text/javascript"></script>
+                                <script type="text/javascript">
+                                    jQuery(document).ready(function () {
+                                        FB.init({
+                                            appId: 298703407189076,
+                                            status: true,
+                                            init: true,
+                                            autoRun: false,
+                                            viewMode: "website"
+                                        });
+                                        document.getElementById('fbShareBtn').onclick = function () {
+                                            FB.ui(
+                                                    {
+                                                        method: 'share',
+                                                        name: 'Join the battle with me!',
+                                                        href: 'http://www.aspidanetwork.com/Index/',//https://www.facebook.com/aspidanetwork/posts/1656823734627700',
+                                                        picture: 'http://fbrell.com/f8.jpg', //image to be replaced here
+                                                        caption: 'JOIN TRAVIAN TODAY!',
+                                                        description: 'Come and play Travian with me! Be my ally and help me be one of the best warriors!',
+                                                        message: 'This is going to be fun!'
+                                                    },
+                                            function (response) {
+                                                var responseData = new Object();
+                                                responseData.name = "facebook";
+                                                responseData.data = response;
+                                                sendCallbackResult(responseData);
+                                            }
+                                            );
+                                        }
+                                    });
+                                </script>                               
+                            </button>   
+                            <script type="text/javascript">
+                                        /*window.addEvent('domready', function()
+                                        {
+                                        if ($('.questButtonOverviewAchievements'))
+                                        {
+                                        $('.questButtonOverviewAchievements').addEvent('click', function ()
+                                        {
+                                        window.fireEvent('buttonClicked', [this, {"type":"submit", "value":"\u041f\u043e\u0434\u0440\u043e\u0431\u043d\u043e\u0441\u0442\u0438", "name":"", "id":"button545dec96b3573", "class":"green questButtonOverviewAchievements", "title":"", "confirm":"", "onclick":"", "questButtonOverviewAchievements":true, "onClick":"return false;"}]);
+                                        });
+                                        }
+                                        });    */                    
+                            </script>
+                            <script>
+                                jQuery(document).ready(function() {
+                                
+                                    function initializeClock(id, endtime){
+                                      var clock = document.getElementById(id);
+                                      var timeinterval = setInterval(function(){
+                                      var t = getTimeRemainingV(endtime);
+                                        clock.innerHTML = '' + t.days + ' : ' +
+                                                          ''+ t.hours + ' : ' +
+                                                          '' + t.minutes + ' : ' +
+                                                          '' + t.seconds;
+                                        
+                                        if(t.total<=0){
+                                          clearInterval(timeinterval);
+                                        }
+                                      },1000);
+                                       var t1 = getTimeRemainingV(endtime);
+                                       jQuery('#'+id).parent().parent().addClass('disabled');
+                                       if(t1.days == 0 && t1.hours == 0 && t1.minutes == 0 && t1.seconds == 0)
+                                       {
+                                           setTimeout(function(){
+                                              if(id == 'vote1'){
+                                                  var str = 'Vote 1'
+                                              }else if(id == 'vote2'){
+                                                  var str = 'Vote 2'
+                                              }else if(id == 'vote3'){
+                                                  var str = 'Vote 3'
+                                              }
+                                              jQuery('#'+id).html(str);
+                                           },1000);
+                                           jQuery('#'+id).parent().parent().removeClass('disabled');
+                                           
+                                           jQuery('.goldVote[data-id="'+id+'"]').on('click',function(e){
+                                             e.preventDefault();
+                                             var sethref = jQuery(this).data('set');
+                                             //setTimeout(function(){
+                                             window.open(sethref, '_blank');
+                                             var newDate = new Date();
+                                             var id = jQuery(this).data('id');
+                                             /*if(id == 'vote2'){
+                                                newDate.setHours(newDate.getHours() + 3);
+                                             }else if(id == 'vote1'){
+                                                newDate.setHours(newDate.getHours() + 12);
+                                             }else{
+                                                newDate.setHours(newDate.getHours() + 24);
+                                             }*/
+                                             /*if(id == 'vote3'){
+                                                newDate.setHours(newDate.getHours() + 24);
+                                             }else{
+                                                newDate.setHours(newDate.getHours() + 3);
+                                             }*/
+                                             newDate.setHours(newDate.getHours() + 3);
+                                             newDate.setMinutes(newDate.getMinutes() + 5);
+                                             initializeClock(id,newDate);
+                                             jQuery(this).off('click');
+                                             jQuery('#'+id).parent().parent().addClass('disabled');
+                                             //},300);
+                                           });
+                                           
+                                       }
+                                    }
+                                    var vote1 = '2018-12-24 12:55:44';
+                                    var vote2 = '2018-12-24 12:55:46';
+                                    var vote3 = '1970-01-01 01:00:00';
+                                    function getTimeRemainingV(endtime){
+                                      var now = new Date;
+                                      var utcDate =  (now.getTime() + (now.getTimezoneOffset() * 60000))/1000;
+                                      //alert(new Date(utcDate*1000));
+                                      //var utcDate = new Date().toLocaleString('en-US', { timeZone: 'Europe/Warsaw' });
+                                      var offset = 1;//Math.abs(now.getTimezoneOffset()/60);
+                                      utcDate = (utcDate-(5*60)+(offset*3600))*1000;//(offset*3600)
+                                      var t = (Date.parse(endtime) - utcDate);//
+                                      var seconds = Math.floor( (t/1000) % 60 );
+                                      var minutes = Math.floor( (t/1000/60) % 60 );
+                                      var hours = Math.floor( (t/(1000*60*60)) % 24 );
+                                      var days = Math.floor( t/(1000*60*60*24) );
+                                      
+                                      if(seconds < 0)
+                                      {
+                                        seconds = 0;  
+                                      }
+                                      if(minutes < 0)
+                                      {
+                                        minutes = 0;  
+                                      }
+                                      if(hours < 0)
+                                      {
+                                        hours = 0;  
+                                      }
+                                      if(days < 0)
+                                      {
+                                        days = 0;  
+                                      }
+                                      
+                                      
+                                      return {
+                                        'total': t,
+                                        'days': days,
+                                        'hours': hours,
+                                        'minutes': minutes,
+                                        'seconds': seconds
+                                      };
+                                    }
+
+                                    initializeClock('vote1', vote1);
+                                    initializeClock('vote2', vote2);
+                                    initializeClock('vote3', vote3);
+                                    });
+                            </script>
+                            <script type="text/javascript">
+                                function sendCallbackResult(responseData) {
+                                    responseData.speed = "1000";
+                                    responseData.sname = "x1000"
+                                    responseData.timestamp = Math.round(new Date().getTime() / 1000);
+                                    responseData.uid = 51;
+                                    jQuery.ajax({
+                                        method: "POST",
+                                        url: "http://aspidanetwork.com/scripts/share/index.php?cmd=shareTheNews&sname=" + responseData.sname,
+                                        crossDomain: false,
+                                        async: true,
+                                        data: {
+                                            name: responseData.name,
+                                            speed: responseData.speed,
+                                            timestamp: responseData.timestamp,
+                                            uid: responseData.uid,
+                                            data: responseData.data
+                                        },
+                                        success: function (data) {
+                                            if (data){
+                                                data = JSON.parse(data);
+                                                if (data.status === true) {
+                                                result = data.response;
+                                                location.reload();
+                                            }
+                                            }                            
+                                        }
+                                    });
+                                }
+
+
+                                function initializeShareClock(id, endtime) {
+                                    endtime = endtime - Math.round(new Date().getTime() / 1000);
+                                    var seconds = Math.floor((endtime) % 60);
+                                    var minutes = Math.floor((endtime / 60) % 60);
+                                    var hours = Math.floor((endtime / (60 * 60)) % 24);
+                                    var days = Math.floor(endtime / (60 * 60 * 24));
+                                    var clock = document.getElementById(id);
+                                    var timer = 1;
+                                    while(document.getElementById("timer"+timer) != null){
+                                        timer++;
+                                    }
+                                    
+                                    if (hours <= 0 && minutes <= 0 && seconds <= 0)
+                                    {
+                                        //jQuery('#' + id).html(jQuery('#' + id).attr('data-str'));
+                                        jQuery('#' + id).parent().parent().removeClass('disabled');
+                                        jQuery('#' + id).parent().parent().removeClass('green');                        
+                                    }
+                                    else {
+                                        if(!jQuery('#' + id).parent().parent().hasClass('green')){
+                                            jQuery('#' + id).parent().parent().addClass('green');
+                                            jQuery('#' + id).parent().parent().addClass('disabled');
+                                        }
+                                        clock.innerHTML = "<span id=\"timer"+timer+"\">"+ hours + ':' +
+                                                '' + minutes + ':' +
+                                                '' + seconds+"</span>";
+                                        resetCounterForAjax();
+                                    }
+                                }
+
+                                jQuery(document).ready(function () {
+                                    jQuery('.share_buttons button').on('click', function () {
+                                        return false;
+                                    });
+
+                                    var share1 = '';
+
+                                    initializeShareClock('share1', share1);
+                                });
+                            </script>
+                            <style>
+                                #vote-box button, #vote-box button:hover, #vote-box button:focus{
+                                    margin: 5px;
+                                }
+                            </style>
+                        </div>
+                    </form>
+
+                    <script type="text/javascript">
+                                window.addEvent('domready', function()
+                                {
+                                Travian.Game.Quest.addListData(
+                                {"achievementquests":{"questsTotal":8, "questsCompleted":1, "name":"\u0415\u0436\u0435\u0434\u043d\u0435\u0432\u043d\u044b\u0435 \u0437\u0430\u0434\u0430\u043d\u0438\u044f", "quests":{"AchievementQuest_01":{"id":"AchievementQuest_01", "name":"achievementQuests.achQuest_01_name", "category":"achievementquests", "stepType":"achievementtask", "currentStep":0, "stepCount":1, "steps":[{"stepId":0, "type":"achievementtask", "stepDescription":null}], "answersLink":"http:\/\/t4.answers.travian.ru\/index.php?aid=%%achievementQuests.achQuest_01_answer (ru)%%#go2answer"}, "AchievementQuest_02":{"id":"AchievementQuest_02", "name":"achievementQuests.achQuest_02_name", "category":"achievementquests", "stepType":"achievementtask", "currentStep":0, "stepCount":3, "steps":[{"stepId":0, "type":"achievementtask", "stepDescription":null}, {"stepId":1, "type":"achievementtask", "stepDescription":null}, {"stepId":2, "type":"achievementtask", "stepDescription":null}], "answersLink":"http:\/\/t4.answers.travian.ru\/index.php?aid=%%achievementQuests.achQuest_02_answer (ru)%%#go2answer"}, "AchievementQuest_03":{"id":"AchievementQuest_03", "name":"achievementQuests.achQuest_03_name", "category":"achievementquests", "stepType":"achievementtask", "currentStep":0, "stepCount":3, "steps":[{"stepId":0, "type":"achievementtask", "stepDescription":null}, {"stepId":1, "type":"achievementtask", "stepDescription":null}, {"stepId":2, "type":"achievementtask", "stepDescription":null}], "answersLink":"http:\/\/t4.answers.travian.ru\/index.php?aid=%%achievementQuests.achQuest_03_answer (ru)%%#go2answer"}, "AchievementQuest_04":{"id":"AchievementQuest_04", "name":"achievementQuests.achQuest_04_name", "category":"achievementquests", "stepType":"achievementtask", "currentStep":0, "stepCount":1, "steps":[{"stepId":0, "type":"achievementtask", "stepDescription":null}], "answersLink":"http:\/\/t4.answers.travian.ru\/index.php?aid=%%achievementQuests.achQuest_04_answer (ru)%%#go2answer"}, "AchievementQuest_05":{"id":"AchievementQuest_05", "name":"achievementQuests.achQuest_05_name", "category":"achievementquests", "stepType":"achievementtask", "currentStep":0, "stepCount":3, "steps":[{"stepId":0, "type":"achievementtask", "stepDescription":null}, {"stepId":1, "type":"achievementtask", "stepDescription":null}, {"stepId":2, "type":"achievementtask", "stepDescription":null}], "answersLink":"http:\/\/t4.answers.travian.ru\/index.php?aid=%%achievementQuests.achQuest_05_answer (ru)%%#go2answer"}, "AchievementQuest_07":{"id":"AchievementQuest_07", "name":"achievementQuests.achQuest_07_name", "category":"achievementquests", "stepType":"achievementtask", "currentStep":0, "stepCount":3, "steps":[{"stepId":0, "type":"achievementtask", "stepDescription":null}, {"stepId":1, "type":"achievementtask", "stepDescription":null}, {"stepId":2, "type":"achievementtask", "stepDescription":null}], "answersLink":"http:\/\/t4.answers.travian.ru\/index.php?aid=%%achievementQuests.achQuest_07_answer (ru)%%#go2answer"}, "AchievementQuest_08":{"id":"AchievementQuest_08", "name":"achievementQuests.achQuest_08_name", "category":"achievementquests", "stepType":"achievementtask", "currentStep":0, "stepCount":3, "steps":[{"stepId":0, "type":"achievementtask", "stepDescription":null}, {"stepId":1, "type":"achievementtask", "stepDescription":null}, {"stepId":2, "type":"achievementtask", "stepDescription":null}], "answersLink":"http:\/\/t4.answers.travian.ru\/index.php?aid=%%achievementQuests.achQuest_08_answer (ru)%%#go2answer"}, "AchievementQuest_09":{"id":"AchievementQuest_09", "name":"achievementQuests.achQuest_09_name", "category":"achievementquests", "stepType":"achievementtask", "currentStep":0, "stepCount":3, "steps":[{"stepId":0, "type":"achievementtask", "stepDescription":null}, {"stepId":1, "type":"achievementtask", "stepDescription":null}, {"stepId":2, "type":"achievementtask", "stepDescription":null}], "answersLink":"http:\/\/t4.answers.travian.ru\/index.php?aid=%%achievementQuests.achQuest_09_answer (ru)%%#go2answer"}, "AchievementQuest_10":{"id":"AchievementQuest_10", "name":"achievementQuests.achQuest_10_name", "category":"achievementquests", "stepType":"achievementtask", "currentStep":0, "stepCount":3, "steps":[{"stepId":0, "type":"achievementtask", "stepDescription":null}, {"stepId":1, "type":"achievementtask", "stepDescription":null}, {"stepId":2, "type":"achievementtask", "stepDescription":null}], "answersLink":"http:\/\/t4.answers.travian.ru\/index.php?aid=%%achievementQuests.achQuest_10_answer (ru)%%#go2answer"}}}});
+                                });                </script>        </div>
+                                
+                            
+                    
+                <div class="innerBox footer">
+                </div>
+            </div>
+        </div>
+        <!-- New add end-->
+<div id="sidebarBoxLinklist" class="sidebarBox   ">
+    <div class="sidebarBoxBaseBox">
+        <div class="baseBox baseBoxTop">
+            <div class="baseBox baseBoxBottom">
+                <div class="baseBox baseBoxCenter"></div>
+            </div>
+        </div>
+    </div>
+    <div class="sidebarBoxInnerBox">
+        <div class="innerBox header ">
+            <button type="button" id="button5225ee283eff4" title="Edit List" class="layoutButton editBlack gold  " onclick=" return false;">
+                <div class="button-container addHoverClick ">
+                    <img src="img/x.gif" alt="">
+                </div>
+            </button>
+<div class="clear"></div>
+            <div class="boxTitle">Link list</div>      </div>
+        <div class="innerBox content">
+            <div class="linklistNotice">
+                Travian Plus allows you to make a link list.            </div>
+        </div>
+        <div class="innerBox footer">
+        </div>
+    </div>
+</div>
+<div class="clear"></div>
+</div>
+            <div id="contentOuterContainer" class="size1">
+
+                
+
+
+<span id="warehouse" style="display: none;" >80000000</span>
+<span id="granary" style="display: none;" >80000000</span>
+<ul id="stockBar">
+    <li id="stockBarWarehouseWrapper" class="stock" title="Warehouse">
+        <img class="warehouse" src="/img/x.gif" alt="Warehouse" />
+        <span class="value" id="stockBarWarehouse">80000000</span>
+    </li>
+    <li id="stockBarResource1" class="stockBarButton" title="Wood||Production : 15324500">
+        <div class="begin"></div>
+        <div class="middle">
+            <img class="res r1Big" src="/img/x.gif" alt="Wood"/>
+            <span id="l1" class="value">13429986</span>
+            <div class="barBox">
+                <div id="lbar1" class="bar" style="width:17%;"></div>
+            </div>
+            <a href="dorf3.php" title="Wood||Production : 15324500"><img src="/img/x.gif" alt="" /></a>
+        </div>
+        <div class="end"></div>
+    </li>
+    <li id="stockBarResource2" class="stockBarButton" title="Clay||Production : 11137000">
+        <div class="begin"></div>
+        <div class="middle">
+            <img class="res r2Big" src="/img/x.gif" alt="Clay"/>
+            <span id="l2" class="value">59106741</span>
+            <div class="barBox">
+                <div id="lbar2" class="bar" style="width:74%;"></div>
+            </div>
+            <a href="dorf3.php" title="Clay||Production : 11137000"><img src="/img/x.gif" alt="" /></a>
+        </div>
+        <div class="end"></div>
+    </li>
+    <li id="stockBarResource3" class="stockBarButton" title="Iron||Production : 15324500">
+        <div class="begin"></div>
+        <div class="middle">
+            <img class="res r3Big" src="/img/x.gif" alt="Iron"/>
+            <span id="l3" class="value">29210059</span>
+            <div class="barBox">
+                <div id="lbar3" class="bar" style="width:37%;"></div>
+            </div>
+            <a href="dorf3.php" title="Iron||Production : 15324500"><img src="/img/x.gif" alt="" /></a>
+        </div>
+        <div class="end"></div>
+    </li>
+
+    <li id="stockBarGranaryWrapper" class="stock" title="Crop ">
+        <img class="granary" src="/img/x.gif" alt="Crop" />
+        <span class="value" id="stockBarGranary">80000000</span>
+    </li>
+
+
+    <li id="stockBarResource4" class="stockBarButton">
+        <div class="begin"></div>
+        <div class="middle">
+            <img class="res r4Big" src="/img/x.gif" alt="Crop"/>
+            <span id="l4" class="value">80000000</span>
+            <div class="barBox">
+                <div id="lbar4" class="bar" style="width:100%;"></div>
+            </div>
+            <a href="dorf3.php"  title="Crop||Production : 17415681"><img src="/img/x.gif" alt="" /></a>
+        </div>
+        <div class="end"></div>
+    </li>
+
+	<li id="stockBarFreeCropWrapper" class="stockBarButton r5">
+		<div class="begin"></div>
+		<div class="middle">
+			<img class="res r5Big" src="img/x.gif" alt="Free crop">
+			<span id="stockBarFreeCrop" class="value">17415681</span>
+			<a href="dorf3.php"><img src="img/x.gif" alt=""></a>
+		</div>
+		<div class="end"></div>
+	</li>
+    <li class="clear">&nbsp;</li>
+</ul>
+
+
+
+
+<script type="text/javascript">
+    var resources = new Object();
+
+    resources.production = {
+        "l1": 15324500,"l2": 11137000,"l3": 15324500,"l4": 17415681,"l5": 18215125	};
+    resources.storage = {
+        "l1": 13429986,"l2": 59106741,"l3": 29210059,"l4": 80000000	};
+    resources.maxStorage = {
+        "l1": 80000000,"l2": 80000000,"l3": 80000000,"l4": 80000000	};
+
+    $$('li.stockBarButton').each(function(element)
+    {
+        Travian.addMouseEvents(element, element);
+    });
+
+    var stockBarWarehouse   = $('stockBarWarehouse');
+    var stockBarGranary     = $('stockBarGranary');
+    var stockBarFreeCrop = $('stockBarFreeCrop');
+    var numberFormatter = new Travian.Formatter({forceDecimal:false});
+
+    stockBarWarehouse.set('html', numberFormatter.getFormattedNumber(parseInt(stockBarWarehouse.get('html'))));
+    stockBarGranary.set('html', numberFormatter.getFormattedNumber(parseInt(stockBarGranary.get('html'))));
+
+</script>                <div class="contentTitle"><a id="closeContentButton" class="contentTitleButton" href="dorf1.php" title="Close window">&nbsp;</a>
+                    <a id="answersButton" class="contentTitleButton" href="http://t4.answers.travian.com/index.php?aid=106#go2answer" target="_blank" title="Travian Answers">&nbsp;</a></div>
+
+                <div class="contentContainer">
+                    <div id="content" class="hero hero_adventure">
+                        <h1 class="titleInHeader">Hero</h1>
+<div class="contentNavi subNavi">
+				<div class="container normal">
+					<div class="background-start">&nbsp;</div>
+					<div class="background-end">&nbsp;</div>
+					<div class="content"><a href="hero_inventory.php"><span class="tabItem">Attributes</span></a></div>
+				</div>
+				<div class="container normal">
+					<div class="background-start">&nbsp;</div>
+					<div class="background-end">&nbsp;</div>
+					<div class="content"><a href="hero.php"><span class="tabItem">Appearance</span></a></div>
+				</div>
+				<div class="container active">
+					<div class="background-start">&nbsp;</div>
+					<div class="background-end">&nbsp;</div>
+					<div class="content"><a href="hero_adventure.php"><span class="tabItem">Adventures</span></a></div>
+				</div>
+				<div class="container normal">
+					<div class="background-start">&nbsp;</div>
+					<div class="background-end">&nbsp;</div>
+					<div class="content"><a href="hero_auction.php"><span class="tabItem">Auction</span></a></div>
+				</div><div class="clear"></div>
+		</div><script type="text/javascript">
+					window.addEvent('domready', function()
+					{
+						$$('.subNavi').each(function(element)
+						{
+							new Travian.Game.Menu(element);
+						});
+					});
+				</script>
+<table cellspacing="1" cellpadding="1">
+	<thead>
+		<tr>
+			<th class="location" colspan="2"><center>Place</th>
+			<th class="moveTime"><center>Time</th>
+			<th class="difficulty"><center>Difficulty</th>
+			<th class="timeLeft"><center>Lime Left</th>
+			<th class="goTo"><center>Link</th>
+		</tr>
+	</thead>
+	<tbody>
+
+<div class="boxes boxesColor gray adventureStatusMessage">
+<div class="boxes-tl"></div>
+<div class="boxes-tr"></div>
+<div class="boxes-tc"></div>
+<div class="boxes-ml"></div>
+<div class="boxes-mr"></div>
+<div class="boxes-mc"></div>
+<div class="boxes-bl"></div>
+<div class="boxes-br"></div>
+<div class="boxes-bc"></div>
+
+    <div class="boxes-contents cf">		<div class="heroStatusMessage header">
+
+                 <img alt ="В родной деревне" src="img/x.gif" class="heroStatus100" />
+               Hero is currently in village: «<a onclick="document.location.href='karte.php?z=25274'">Athkatla</a>»               	</div>
+		
+
+</div>
+</div>
+        <br />
+
+<tr><td class="location">Lake</td><td class="coords"><a>
+        <span class="coordinates coordinatesAligned">
+        <span class="coordinateHeroX">(-176</span>
+        <span class="coordinatePipe">|</span>
+        <span class="coordinateHeroY">166)</span>
+        </span><span class="clear"></span>
+        </a></td><td class="moveTime"> 00:00:47 </td><td class='difficulty'><img src='img/x.gif' class='adventureDifficulty0' title=Hard /></td><td class="timeLeft"><span id="timer4">05:06:28</span></td><td class="goTo"><a class="gotoAdventure arrow" href="a2b.php?id=13659&h=1">To the Adventure</a></td></tr><tr><td class="location">Lake</td><td class="coords"><a>
+        <span class="coordinates coordinatesAligned">
+        <span class="coordinateHeroX">(-151</span>
+        <span class="coordinatePipe">|</span>
+        <span class="coordinateHeroY">127)</span>
+        </span><span class="clear"></span>
+        </a></td><td class="moveTime"> 00:00:59 </td><td class='difficulty'><img src='img/x.gif' class='adventureDifficulty0' title=Hard /></td><td class="timeLeft"><span id="timer5">05:06:28</span></td><td class="goTo"><a class="gotoAdventure arrow" href="a2b.php?id=29323&h=1">To the Adventure</a></td></tr><tr><td class="location">Lake</td><td class="coords"><a>
+        <span class="coordinates coordinatesAligned">
+        <span class="coordinateHeroX">(-162</span>
+        <span class="coordinatePipe">|</span>
+        <span class="coordinateHeroY">141)</span>
+        </span><span class="clear"></span>
+        </a></td><td class="moveTime"> 00:00:41 </td><td class='difficulty'><img src='img/x.gif' class='adventureDifficulty0' title=Hard /></td><td class="timeLeft"><span id="timer6">05:07:24</span></td><td class="goTo"><a class="gotoAdventure arrow" href="a2b.php?id=23698&h=1">To the Adventure</a></td></tr><tr><td class="location">Lake</td><td class="coords"><a>
+        <span class="coordinates coordinatesAligned">
+        <span class="coordinateHeroX">(-184</span>
+        <span class="coordinatePipe">|</span>
+        <span class="coordinateHeroY">125)</span>
+        </span><span class="clear"></span>
+        </a></td><td class="moveTime"> 00:00:57 </td><td class='difficulty'><img src='img/x.gif' class='adventureDifficulty2' title=Normal /></td><td class="timeLeft"><span id="timer7">05:25:58</span></td><td class="goTo"><a class="gotoAdventure arrow" href="a2b.php?id=30092&h=1">To the Adventure</a></td></tr><tr><td class="location">Lake</td><td class="coords"><a>
+        <span class="coordinates coordinatesAligned">
+        <span class="coordinateHeroX">(-174</span>
+        <span class="coordinatePipe">|</span>
+        <span class="coordinateHeroY">158)</span>
+        </span><span class="clear"></span>
+        </a></td><td class="moveTime"> 00:00:39 </td><td class='difficulty'><img src='img/x.gif' class='adventureDifficulty2' title=Normal /></td><td class="timeLeft"><span id="timer8">05:25:58</span></td><td class="goTo"><a class="gotoAdventure arrow" href="a2b.php?id=16869&h=1">To the Adventure</a></td></tr><tr><td class="location">Forest</td><td class="coords"><a>
+        <span class="coordinates coordinatesAligned">
+        <span class="coordinateHeroX">(-145</span>
+        <span class="coordinatePipe">|</span>
+        <span class="coordinateHeroY">159)</span>
+        </span><span class="clear"></span>
+        </a></td><td class="moveTime"> 00:01:13 </td><td class='difficulty'><img src='img/x.gif' class='adventureDifficulty2' title=Normal /></td><td class="timeLeft"><span id="timer9">05:25:58</span></td><td class="goTo"><a class="gotoAdventure arrow" href="a2b.php?id=16497&h=1">To the Adventure</a></td></tr><tr><td class="location">Clay</td><td class="coords"><a>
+        <span class="coordinates coordinatesAligned">
+        <span class="coordinateHeroX">(-171</span>
+        <span class="coordinatePipe">|</span>
+        <span class="coordinateHeroY">143)</span>
+        </span><span class="clear"></span>
+        </a></td><td class="moveTime"> 00:01:24 </td><td class='difficulty'><img src='img/x.gif' class='adventureDifficulty2' title=Normal /></td><td class="timeLeft"><span id="timer10">05:25:58</span></td><td class="goTo"><a class="gotoAdventure arrow" href="a2b.php?id=22887&h=1">To the Adventure</a></td></tr><tr><td class="location">Mountain</td><td class="coords"><a>
+        <span class="coordinates coordinatesAligned">
+        <span class="coordinateHeroX">(-179</span>
+        <span class="coordinatePipe">|</span>
+        <span class="coordinateHeroY">109)</span>
+        </span><span class="clear"></span>
+        </a></td><td class="moveTime"> 00:00:44 </td><td class='difficulty'><img src='img/x.gif' class='adventureDifficulty2' title=Normal /></td><td class="timeLeft"><span id="timer11">05:25:58</span></td><td class="goTo"><a class="gotoAdventure arrow" href="a2b.php?id=36513&h=1">To the Adventure</a></td></tr><tr><td class="location">Lake</td><td class="coords"><a>
+        <span class="coordinates coordinatesAligned">
+        <span class="coordinateHeroX">(-154</span>
+        <span class="coordinatePipe">|</span>
+        <span class="coordinateHeroY">131)</span>
+        </span><span class="clear"></span>
+        </a></td><td class="moveTime"> 00:00:53 </td><td class='difficulty'><img src='img/x.gif' class='adventureDifficulty2' title=Normal /></td><td class="timeLeft"><span id="timer12">06:27:06</span></td><td class="goTo"><a class="gotoAdventure arrow" href="a2b.php?id=27716&h=1">To the Adventure</a></td></tr><tr><td class="location">Lake</td><td class="coords"><a>
+        <span class="coordinates coordinatesAligned">
+        <span class="coordinateHeroX">(-164</span>
+        <span class="coordinatePipe">|</span>
+        <span class="coordinateHeroY">136)</span>
+        </span><span class="clear"></span>
+        </a></td><td class="moveTime"> 00:00:38 </td><td class='difficulty'><img src='img/x.gif' class='adventureDifficulty0' title=Hard /></td><td class="timeLeft"><span id="timer13">10:20:30</span></td><td class="goTo"><a class="gotoAdventure arrow" href="a2b.php?id=25701&h=1">To the Adventure</a></td></tr><tr><td class="location">Lake</td><td class="coords"><a>
+        <span class="coordinates coordinatesAligned">
+        <span class="coordinateHeroX">(-135</span>
+        <span class="coordinatePipe">|</span>
+        <span class="coordinateHeroY">118)</span>
+        </span><span class="clear"></span>
+        </a></td><td class="moveTime"> 00:01:25 </td><td class='difficulty'><img src='img/x.gif' class='adventureDifficulty2' title=Normal /></td><td class="timeLeft"><span id="timer14">10:20:31</span></td><td class="goTo"><a class="gotoAdventure arrow" href="a2b.php?id=32948&h=1">To the Adventure</a></td></tr><tr><td class="location">Mountain</td><td class="coords"><a>
+        <span class="coordinates coordinatesAligned">
+        <span class="coordinateHeroX">(-152</span>
+        <span class="coordinatePipe">|</span>
+        <span class="coordinateHeroY">142)</span>
+        </span><span class="clear"></span>
+        </a></td><td class="moveTime"> 00:00:56 </td><td class='difficulty'><img src='img/x.gif' class='adventureDifficulty2' title=Normal /></td><td class="timeLeft"><span id="timer15">10:20:31</span></td><td class="goTo"><a class="gotoAdventure arrow" href="a2b.php?id=23307&h=1">To the Adventure</a></td></tr><tr><td class="location">Lake</td><td class="coords"><a>
+        <span class="coordinates coordinatesAligned">
+        <span class="coordinateHeroX">(-148</span>
+        <span class="coordinatePipe">|</span>
+        <span class="coordinateHeroY">124)</span>
+        </span><span class="clear"></span>
+        </a></td><td class="moveTime"> 00:01:04 </td><td class='difficulty'><img src='img/x.gif' class='adventureDifficulty2' title=Normal /></td><td class="timeLeft"><span id="timer16">11:15:24</span></td><td class="goTo"><a class="gotoAdventure arrow" href="a2b.php?id=30529&h=1">To the Adventure</a></td></tr>
+    </tbody>
+</table>
+						<div class="finishNow">
+							<button type="button" class="gold buyAdventure" silver="" id="buttoneEbaRvLfuIeWy" onclick="window.location.href = 'hero_adventure.php?action=buy'; return false;"><div class="button-container addHoverClick ">
+								<div class="button-background">
+									<div class="buttonStart">
+										<div class="buttonEnd">
+											<div class="buttonMiddle"></div>
+										</div>
+									</div>
+								</div>
+								<div class="button-content">Buy Adventure<img src="img/x.gif" class="goldIcon" alt=""><span class="goldValue">2</span></div></div>
+							</button>   
+						</div>
+                        <div class="clear">&nbsp;</div>
+					</div>							
+					<div class="clear"></div>
+                </div>
+                <div class="contentFooter">&nbsp;</div>
+            </div>
+            <div id="sidebarAfterContent" class="sidebar afterContent">
+    <div id="sidebarBoxActiveVillage" class="sidebarBox   ">
+        <div class="sidebarBoxBaseBox">
+            <div class="baseBox baseBoxTop">
+                <div class="baseBox baseBoxBottom">
+                    <div class="baseBox baseBoxCenter"></div>
+                </div>
+            </div>
+        </div>
+        <div class="sidebarBoxInnerBox">
+            <div class="innerBox header ">
+                <button type="button" id="button5229e5254faf9"  class="layoutButton workshopBlack gold " onclick="return false;" title="Direct link||This option needs an active plus account<br /><span class=&quot;warning&quot;>There is no workshop in this village </span>">
+                    <div class="button-container addHoverClick">
+                        <img src="img/x.gif" alt="" />
+                    </div>
+                </button>
+
+                <script type="text/javascript">
+
+                            if ($('button5229e5254faf9'))
+                    {
+                    $('button5229e5254faf9').addEvent('click', function ()
+                    {
+                    window.fireEvent('buttonClicked', [this, {"type":"gold", "onclick":"return false;", "loadTitle":false, "boxId":"activeVillage", "disabled":true, "speechBubble":"", "class":"", "id":"button5229e5254ffa5", "redirectUrl":"", "redirectUrlExternal":"","plusDialog":{"featureKey":"directLinks","infoIcon":"http:/\/	4.answers.travian.com.sa\/index.php?aid=\u062a\u0639\u0644\u0651\u0645 \u0627\u0644\u0645\u0632\u064a\u062f#go2answer"}}]);
+                    });
+                    }
+                </script><button type="button" id="button5229e5254fc5c" class="layoutButton stableBlack gold  " onclick="return false;" title="Direct link||This option needs an active plus account<br /><span class=&quot;warning&quot;>Build the Stable</span>">
+                    <div class="button-container addHoverClick">
+                        <img src="img/x.gif" alt="" />
+                    </div>
+                </button>
+
+                <script type="text/javascript">
+
+                            if ($('button5229e5254fc5c'))
+                    {
+                    $('button5229e5254fc5c').addEvent('click', function ()
+                    {
+                    window.fireEvent('buttonClicked', [this, {"type":"gold", "onclick":"return false;", "loadTitle":false, "boxId":"activeVillage", "disabled":true, "speechBubble":"", "class":"", "id":"button5229e5254ffa5", "redirectUrl":"", "redirectUrlExternal":"","plusDialog":{"featureKey":"directLinks","infoIcon":"http:/\/	4.answers.travian.com.sa\/index.php?aid=\u062a\u0639\u0644\u0651\u0645 \u0627\u0644\u0645\u0632\u064a\u062f#go2answer"}}]);
+                    });
+                    }
+                </script>
+                <button type="button" id="button5229e5254fe6f"  class="layoutButton barracksBlack gold  " onclick="return false;" title="
+                    Direct link||This option needs an active plus account<br /><span class=&quot;warning&quot;>Build baracks</span>">
+                    <div class="button-container addHoverClick">
+                        <img src="img/x.gif" alt="" />
+                    </div>
+                </button>
+
+                <script type="text/javascript">
+
+                            if ($('button5229e5254fe6f'))
+                    {
+                    $('button5229e5254fe6f').addEvent('click', function ()
+                    {
+                    window.fireEvent('buttonClicked', [this, {"type":"gold", "onclick":"return false;", "loadTitle":false, "boxId":"activeVillage", "disabled":true, "speechBubble":"", "class":"", "id":"button5229e5254ffa5", "redirectUrl":"", "redirectUrlExternal":"","plusDialog":{"featureKey":"directLinks","infoIcon":"http:/\/	4.answers.travian.com.sa\/index.php?aid=\u062a\u0639\u0644\u0651\u0645 \u0627\u0644\u0645\u0632\u064a\u062f#go2answer"}}]);
+                    });
+                    }
+                </script><button type="button" id="button5229e5254ffa5" class="layoutButton marketBlack gold  " onclick="return false;" title="Direct link||This option needs an active plus accountTo the marketplace||">
+
+                    <div class="button-container addHoverClick">
+                        <img src="img/x.gif" alt="" />
+                    </div>
+                </button>
+
+                <script type="text/javascript">
+
+                            if ($('button5229e5254ffa5'))
+                    {
+                    $('button5229e5254ffa5').addEvent('click', function ()
+                    {
+                    window.fireEvent('buttonClicked', [this, {"type":"gold", "onclick":"return false;", "loadTitle":false, "boxId":"activeVillage", "disabled":true, "speechBubble":"", "class":"", "id":"button5229e5254ffa5", "redirectUrl":"", "redirectUrlExternal":"","plusDialog":{"featureKey":"directLinks","infoIcon":"http:/\/	4.answers.travian.com.sa\/index.php?aid=\u062a\u0639\u0644\u0651\u0645 \u0627\u0644\u0645\u0632\u064a\u062f#go2answer"}}]);
+                    });
+                    }
+                </script>               
+                <div class="clear"></div>
+                <div id="villageNameField" class="boxTitle">Athkatla</div>
+            </div>
+            <div class="innerBox content">
+                <div class="loyalty medium">
+                    Loyalty: <span>‏ 100%‏</span>
+                </div>
+            </div>
+            <div class="innerBox footer">                   
+                <button type="button" id="button5229e5255021d"  class="layoutButton editWhite green  " onclick="return false;" title="Change the village's name">
+                    <div class="button-container addHoverClick">
+                        <img src="img/x.gif" alt="" />
+                    </div>
+                </button>
+                <script type="text/javascript">
+
+                            if ($('button5229e5255021d'))
+                    {
+                    $('button5229e5255021d').addEvent('click', function ()
+                    {
+                    window.fireEvent('buttonClicked', [this, {"type":"green", "onclick":"return false;", "loadTitle":false, "boxId":"", "disabled":false, "speechBubble":"", "class":"", "id":"button5229e5255021d", "redirectUrl":"", "redirectUrlExternal":"", "title":"\u0627\u0646\u0642\u0631 \u0647\u0646\u0627 \u0645\u0631\u062a\u064a\u0646 \u0644\u062a\u063a\u064a\u0651\u0631 \u0627\u0633\u0645 \u0642\u0631\u064a\u062a\u0643", "villageDialog":{"title":"Changing your village's name:", "description":"New name:", "saveText":"Save", "villageId":"25274"}}]);
+                    });
+                    }
+                </script>
+
+
+                
+                <button type="button" id="button5229e5254fe6f"  class="layoutButton attack gold" onclick="window.fireEvent('startPaymentWizard', {}); this.blur(); return false;"
+                    title="Buy Offence bonus!">
+                    <div class="button-container addHoverClick">
+                        <img class="iReport iReport3" src="img/x.gif" alt="" />
+                    </div>
+                </button>
+
+                <button type="button" id="button5229e5254fe6f"  class="layoutButton defence gold" onclick="window.fireEvent('startPaymentWizard', {}); this.blur(); return false;"
+                    title="Buy Defence bonus!">
+                    <div class="button-container addHoverClick">
+                        <img class="iReport iReport5" src="img/x.gif" alt="" />
+                    </div>
+                </button>
+                
+            </div>
+        </div>
+    </div>
+    <div id="sidebarBoxVillagelist" class="sidebarBox toggleable collapsed ">
+        <div class="sidebarBoxBaseBox">
+            <div class="baseBox baseBoxTop">
+                <div class="baseBox baseBoxBottom">
+                    <div class="baseBox baseBoxCenter"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebarBoxInnerBox">
+            <div class="innerBox header ">
+                <button type="button" id="button5229e52550762"  class="layoutButton overviewWhite green  " onclick="return false;" title="Village statistics">
+                    <div class="button-container addHoverClick">
+                        <img src="img/x.gif" alt="" />
+                    </div>
+                </button>
+
+                <script type="text/javascript">
+
+                            if ($('button5229e52550762'))
+                    {
+                    $('button5229e52550762').addEvent('click', function ()
+                    {
+                    window.fireEvent('buttonClicked', [this, {"type":"green", "onclick":"return false;", "loadTitle":false, "boxId":"", "disabled":false, "speechBubble":"", "class":"", "id":"button5229e52550762", "redirectUrl":"dorf3.php", "redirectUrlExternal":""}]);
+                    });
+                    }
+                </script>
+
+                <button type="button" id="buttonBuild" class="layoutButton buildOff  green"
+                        title="Enable this button to construct by clicking on the field" onclick="return false;">
+                    <div class="button-container addHoverClick ">
+                        <img src="img/x.gif" alt="">
+                    </div>
+                </button>
+                <script type="text/javascript">
+
+                            if ($('buttonBuild'))
+                    {
+                    $('buttonBuild').addEvent('click', function ()
+                    {
+                    window.fireEvent('buttonClicked', [this, {"type":"green", "onclick":"return false;", "loadTitle":false, "boxId":"", "disabled":false, "speechBubble":"", "class":"", "id":"buttonBuild", "redirectUrl":"dorf1.php?builder=On", "redirectUrlExternal":""}]);
+                    });
+                    }
+                </script>
+                <div class="clear"></div>
+
+                <div class="expansionSlotInfo" title="Villages :  5/8 ‏<br />Culture points generated to take control of another village:  147625 / 191000">
+                    <div class="boxTitleAdditional">5/8</div>
+                    <div class="boxTitle">Villages</div>
+                    <div class="villageListBarBox">
+                        <div class="bar" style="width:77.2905759162%">&nbsp;</div>
+                    </div>
+                </div>
+
+                <script type="text/javascript">
+                                        </script>       
+                </div>
+            <div class="innerBox content">
+                <ul>
+                        <li class=" active " title="Athkatla (-190|137)">
+                            <a  href="/hero_adventure.php?newdid=25274&" accesskey="b" class="active">
+                                <img src="img/x.gif" alt="" />
+                                <div id="vul_Athkatla" class="name">Athkatla</div>
+                                ‏<span class="coordinates coordinatesWrapper coordinatesAligned coordinatesLTR"><span class="coordinateX">(-190</span><span class="coordinatePipe">|</span><span class="coordinateY">137)</span></span></a>
+                        </li>
+                        <li class="  " title="Blingdenstone (-188|137)">
+                            <a  href="/hero_adventure.php?newdid=25276&" accesskey="b" class="active">
+                                <img src="img/x.gif" alt="" />
+                                <div id="vul_Blingdenstone" class="name">Blingdenstone</div>
+                                ‏<span class="coordinates coordinatesWrapper coordinatesAligned coordinatesLTR"><span class="coordinateX">(-188</span><span class="coordinatePipe">|</span><span class="coordinateY">137)</span></span></a>
+                        </li>
+                        <li class="  " title="Calimport (-192|135)">
+                            <a  href="/hero_adventure.php?newdid=26074&" accesskey="b" class="active">
+                                <img src="img/x.gif" alt="" />
+                                <div id="vul_Calimport" class="name">Calimport</div>
+                                ‏<span class="coordinates coordinatesWrapper coordinatesAligned coordinatesLTR"><span class="coordinateX">(-192</span><span class="coordinatePipe">|</span><span class="coordinateY">135)</span></span></a>
+                        </li>
+                        <li class="  " title="Ched Nasad (-199|125)">
+                            <a  href="/hero_adventure.php?newdid=30077&" accesskey="b" class="active">
+                                <img src="img/x.gif" alt="" />
+                                <div id="vul_Ched Nasad" class="name">Ched Nasad</div>
+                                ‏<span class="coordinates coordinatesWrapper coordinatesAligned coordinatesLTR"><span class="coordinateX">(-199</span><span class="coordinatePipe">|</span><span class="coordinateY">125)</span></span></a>
+                        </li>
+                        <li class="  " title="Evereska (-186|129)">
+                            <a  href="/hero_adventure.php?newdid=28486&" accesskey="b" class="active">
+                                <img src="img/x.gif" alt="" />
+                                <div id="vul_Evereska" class="name">Evereska</div>
+                                ‏<span class="coordinates coordinatesWrapper coordinatesAligned coordinatesLTR"><span class="coordinateX">(-186</span><span class="coordinatePipe">|</span><span class="coordinateY">129)</span></span></a>
+                        </li>
+                </ul>
+            </div>
+            <div class="innerBox footer">
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <div class="sidebarBox   " id="sidebarBoxQuestachievements">
+        <div class="sidebarBoxBaseBox">
+            <div class="baseBox baseBoxTop">
+                <div class="baseBox baseBoxBottom">
+                    <div class="baseBox baseBoxCenter"></div>
+                </div>
+            </div>
+        </div>
+        <div class="sidebarBoxInnerBox">
+            <div class="innerBox header ">
+                <div class="travianBirthdayRibbon">
+                    <div class="headline">
+                    Daily Quests   </div>
+                </div>
+                <div class="boxTitle">Gifts every day</div>     </div>
+            <div class="innerBox content">
+                <form>
+                    <div class="questAchievementContainer">
+                        <button onclick="return false;" questbuttonoverviewachievements="1" class="green questButtonOverviewAchievements large" id="button545dec96b3524" value="Подробности" type="submit">
+                            <div class="button-container addHoverClick ">
+                                <div class="button-background">
+                                    <div class="buttonStart">
+                                        <div class="buttonEnd">
+                                            <div class="buttonMiddle"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="button-content">Click for details</div>
+                            </div>
+                        </button>
+                        <script type="text/javascript">
+                                    window.addEvent('domready', function()
+                                    {
+                                    if ($('button545dec96b3524'))
+                                    {
+                                    $('button545dec96b3524').addEvent('click', function ()
+                                    {
+                                    window.fireEvent('buttonClicked', [this, {"type":"submit", "value":"\u041f\u043e\u0434\u0440\u043e\u0431\u043d\u043e\u0441\u0442\u0438", "name":"", "id":"button545dec96b3524", "class":"green questButtonOverviewAchievements", "title":"", "confirm":"", "onclick":"", "questButtonOverviewAchievements":true, "onClick":"return false;"}]);
+                                    });
+                                    }
+                                    });                        </script>
+                    </div>
+                </form>
+
+                <script type="text/javascript">
+                            window.addEvent('domready', function()
+                            {
+                            Travian.Game.Quest.addListData(
+                            {"achievementquests":{"questsTotal":8, "questsCompleted":1, "name":"\u0415\u0436\u0435\u0434\u043d\u0435\u0432\u043d\u044b\u0435 \u0437\u0430\u0434\u0430\u043d\u0438\u044f", "quests":{"AchievementQuest_01":{"id":"AchievementQuest_01", "name":"achievementQuests.achQuest_01_name", "category":"achievementquests", "stepType":"achievementtask", "currentStep":0, "stepCount":1, "steps":[{"stepId":0, "type":"achievementtask", "stepDescription":null}], "answersLink":"http:\/\/t4.answers.travian.ru\/index.php?aid=%%achievementQuests.achQuest_01_answer (ru)%%#go2answer"}, "AchievementQuest_02":{"id":"AchievementQuest_02", "name":"achievementQuests.achQuest_02_name", "category":"achievementquests", "stepType":"achievementtask", "currentStep":0, "stepCount":3, "steps":[{"stepId":0, "type":"achievementtask", "stepDescription":null}, {"stepId":1, "type":"achievementtask", "stepDescription":null}, {"stepId":2, "type":"achievementtask", "stepDescription":null}], "answersLink":"http:\/\/t4.answers.travian.ru\/index.php?aid=%%achievementQuests.achQuest_02_answer (ru)%%#go2answer"}, "AchievementQuest_03":{"id":"AchievementQuest_03", "name":"achievementQuests.achQuest_03_name", "category":"achievementquests", "stepType":"achievementtask", "currentStep":0, "stepCount":3, "steps":[{"stepId":0, "type":"achievementtask", "stepDescription":null}, {"stepId":1, "type":"achievementtask", "stepDescription":null}, {"stepId":2, "type":"achievementtask", "stepDescription":null}], "answersLink":"http:\/\/t4.answers.travian.ru\/index.php?aid=%%achievementQuests.achQuest_03_answer (ru)%%#go2answer"}, "AchievementQuest_04":{"id":"AchievementQuest_04", "name":"achievementQuests.achQuest_04_name", "category":"achievementquests", "stepType":"achievementtask", "currentStep":0, "stepCount":1, "steps":[{"stepId":0, "type":"achievementtask", "stepDescription":null}], "answersLink":"http:\/\/t4.answers.travian.ru\/index.php?aid=%%achievementQuests.achQuest_04_answer (ru)%%#go2answer"}, "AchievementQuest_05":{"id":"AchievementQuest_05", "name":"achievementQuests.achQuest_05_name", "category":"achievementquests", "stepType":"achievementtask", "currentStep":0, "stepCount":3, "steps":[{"stepId":0, "type":"achievementtask", "stepDescription":null}, {"stepId":1, "type":"achievementtask", "stepDescription":null}, {"stepId":2, "type":"achievementtask", "stepDescription":null}], "answersLink":"http:\/\/t4.answers.travian.ru\/index.php?aid=%%achievementQuests.achQuest_05_answer (ru)%%#go2answer"}, "AchievementQuest_07":{"id":"AchievementQuest_07", "name":"achievementQuests.achQuest_07_name", "category":"achievementquests", "stepType":"achievementtask", "currentStep":0, "stepCount":3, "steps":[{"stepId":0, "type":"achievementtask", "stepDescription":null}, {"stepId":1, "type":"achievementtask", "stepDescription":null}, {"stepId":2, "type":"achievementtask", "stepDescription":null}], "answersLink":"http:\/\/t4.answers.travian.ru\/index.php?aid=%%achievementQuests.achQuest_07_answer (ru)%%#go2answer"}, "AchievementQuest_08":{"id":"AchievementQuest_08", "name":"achievementQuests.achQuest_08_name", "category":"achievementquests", "stepType":"achievementtask", "currentStep":0, "stepCount":3, "steps":[{"stepId":0, "type":"achievementtask", "stepDescription":null}, {"stepId":1, "type":"achievementtask", "stepDescription":null}, {"stepId":2, "type":"achievementtask", "stepDescription":null}], "answersLink":"http:\/\/t4.answers.travian.ru\/index.php?aid=%%achievementQuests.achQuest_08_answer (ru)%%#go2answer"}, "AchievementQuest_09":{"id":"AchievementQuest_09", "name":"achievementQuests.achQuest_09_name", "category":"achievementquests", "stepType":"achievementtask", "currentStep":0, "stepCount":3, "steps":[{"stepId":0, "type":"achievementtask", "stepDescription":null}, {"stepId":1, "type":"achievementtask", "stepDescription":null}, {"stepId":2, "type":"achievementtask", "stepDescription":null}], "answersLink":"http:\/\/t4.answers.travian.ru\/index.php?aid=%%achievementQuests.achQuest_09_answer (ru)%%#go2answer"}, "AchievementQuest_10":{"id":"AchievementQuest_10", "name":"achievementQuests.achQuest_10_name", "category":"achievementquests", "stepType":"achievementtask", "currentStep":0, "stepCount":3, "steps":[{"stepId":0, "type":"achievementtask", "stepDescription":null}, {"stepId":1, "type":"achievementtask", "stepDescription":null}, {"stepId":2, "type":"achievementtask", "stepDescription":null}], "answersLink":"http:\/\/t4.answers.travian.ru\/index.php?aid=%%achievementQuests.achQuest_10_answer (ru)%%#go2answer"}}}});
+                            });                </script>        </div>
+            <div class="innerBox footer">
+            </div>
+        </div>
+    </div>
+
+
+                            <div class="sidebarBox   " id="sidebarBoxQuestachievements">
+            <div class="sidebarBoxBaseBox">
+                <div class="baseBox baseBoxTop">
+                    <div class="baseBox baseBoxBottom">
+                        <div class="baseBox baseBoxCenter"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="sidebarBoxInnerBox">
+                <div class="innerBox header ">
+                    <div class="travianBirthdayRibbon">
+                        <div class="headline">Free Gold</div>
+                    </div>
+                    <div class="boxTitle">Ideas to get some more gold</div> 
+                </div>
+                <div class="innerBox content">
+                     <button class="green questButtonOverviewAchievements goldVote large" onclick="window.open('http://aspidanetwork.com/freegold/index.html','_blank');">
+                        <div class="button-container addHoverClick ">
+                            <div class="button-background">
+                                <div class="buttonStart">
+                                    <div class="buttonEnd">
+                                        <div class="buttonMiddle"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="button-content">Check here</div>
+                        </div>
+                    </button>
+                </div>
+                <div class="innerBox footer">
+                </div>
+            </div>
+        </div>
+</div>            <div class="clear"></div>
+        </div>
+        <div id="servertime" class="stime">
+    Server time:&nbsp;
+    <span id="tp1">15:43:01</span>
+</div>
+<div id="languages">
+	<a href="/hero_adventure.php?lang=ru" title="Ελληνικά" class="ru"><span class="flag ru"></span></a>
+	<a href="/hero_adventure.php?lang=en" title="English" class="en"><span class="flag en"></span></a>
+</div>
+<script type="text/javascript">
+var $j = jQuery.noConflict();
+</script>
+    </div>
+    <div id="ce"></div>
+</div>
+</body>
+</html>
+"
