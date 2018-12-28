@@ -48,37 +48,21 @@ export default class BuildQueue {
     }
 
     upgradeBuilding = (buildingId: string, callback?: () => void, onError?: (building: Building) => void) => {
-
-        const test = (building) => new Promise(async (resolve, reject) => {
-            // console.log(`village ${this._village.name} aquired lock`);
-            if (!this._village.isActive) await changeVillage(this._village)
-            // console.log(`try to build ${building.name}`)
-            const updatedBuilding = await upgradeBuilding(building);
-            this._village.buildingStore.addBuildings([updatedBuilding]);
-            const duration = updatedBuilding.duration;
-            // console.log(`duration: ${duration}`)
-            resolve(updatedBuilding);
-        })
         var task = new QueueTask(`${buildingId}`, () => new Promise(async (resolve, reject) => {
             let updatedBuilding: Building, duration;
             const building = this._village.buildingStore.getUpgreadableBuildings().find(i => i.id === buildingId);
-            console.log(building);
             if (building === null || building === undefined) {
                 resolve('building upgrade process is finished')
                 return;
             } else {
                 try {
                     await villageLock(this._lock, this._village, async () => {
+                        console.log(`${this._village.name} :: ${building.name} :: upgrade building`);
                         updatedBuilding = await upgradeBuilding(building);
+                        console.log(`${this._village.name} :: ${building.name} :: upgrade building is finished`);
                         this._village.buildingStore.addBuildings([updatedBuilding]);
                         duration = updatedBuilding.duration;
                     })
-                    // await this._lock.acquire('buildQueue', async () => {
-                    //     console.log(`${this._village.name} :: ${building.name} :: enter buildQueue lock`);
-                    //     if (!this._village.isActive) await changeVillage(this._village)
-
-                    //     console.log(`${this._village.name} :: ${building.name} ::  left buildQueue`);
-                    // })
                     console.log(`${this._village.name} :: ${building.name} :: countdown ${duration}`);
                     const response = await delay(duration);
                     console.log(`${this._village.name} :: ${building.name} :: countdown finished`);
@@ -89,7 +73,7 @@ export default class BuildQueue {
                     reject(error);
                 }
             }
-            if (callback) await callback();
+            if (callback) callback();
 
         }));
         this.queue.push(task);
@@ -138,15 +122,6 @@ export default class BuildQueue {
                 await delay("0:0:2");
                 resolve();
             })
-            // const buildPage = await this._village.api.newBuildingPage(placeId);
-            // const captcha = parseNewBuildingCaptcha(buildPage);
-            // console.log(captcha);
-            // if (!captcha || !placeId || !buildingId) {
-            //     console.error('error in queue while parsing parameters');
-            //     resolve();
-            // }
-            // const response = await this._village.api.newBuilding(placeId, buildingId, captcha);
-            // resolve();
         }));
         this.queue.push(task);
         console.log("Added new building to queue");

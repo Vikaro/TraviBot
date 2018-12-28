@@ -39,7 +39,7 @@ export async function autoUpgrade(village: Village) {
         if (sorted.length > 0) {
             buildQueue.upgradeBuilding(sorted[0].id, autoBuildFunction);
         }
-        await updateFunc;
+        // await updateFunc;
     };
 
 

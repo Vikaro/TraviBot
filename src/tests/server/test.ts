@@ -9,6 +9,8 @@ import { townHallParser } from '../../server/parser/townHallParser';
 import { parseBarracksPage } from '../../server/parser/barracksParser';
 import { parseNewBuildingCaptcha } from '../../server/parser/buildingsParser';
 import { AssertionError } from 'assert';
+import { parseMap } from '../../server/parser/mapParser';
+import { parseSendTroops } from '../../server/parser/unitsParser';
 
 const api = new TravianAPI()
 // var assert = require('assert');
@@ -213,3 +215,50 @@ describe('Testing new buildings', () => {
     });
 });
 
+describe('Testing map', () => {
+    describe('parsing map json', () => {
+        const inputFile = fs.readFileSync('src/tests/server/responses/map1.json', 'utf8');
+
+        it('should return atleast one village', () => {
+            // @ts-ignore
+            let res: Response = {};
+            res['text'] = inputFile;
+            const map = parseMap(res);
+            assert.isNotEmpty(map['villages']);
+            assert.deepEqual(map, {
+                villages:
+                    [{
+                        name: 'Athkatla(-99|76)',
+                        player: 'vikaro',
+                        population: '1294',
+                        alliance: '',
+                        x: - 99,
+                        y: 76
+                    },
+                    {
+                        name: 'Village EMO(-93|79)',
+                        player: 'EMO',
+                        population: '1615',
+                        alliance: '',
+                        x: - 93,
+                        y: 79
+                    }]
+            });
+        });
+    });
+});
+
+
+describe('Sending troops', () => {
+    const inputFile = fs.readFileSync('src/tests/server/responses/sendUnits1_2.html', 'utf8');
+
+    it('parser in second step should return valid form data', () => {
+        // @ts-ignore
+        let res: Response = {};
+        res['text'] = inputFile;
+        const params = parseSendTroops(res);
+
+        assert.isNotNull(params);
+        console.log(params);
+    })
+})

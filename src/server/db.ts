@@ -14,7 +14,7 @@ export default class User {
   public adventuresQueue = new adventuresQueue(this);
   public adventures: {[id:string] : Adventure} = {};
   public heroVillageId;
-  public lock = new AsyncLock();
+  public lock = new AsyncLock({ domainReentrant: true });
   public api = travianAPI;
 }
 

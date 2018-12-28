@@ -11,7 +11,7 @@ import { User1 } from './db';
 import { fetchInitialData } from './services/villageService';
 import { getListOfAdventures, startAdventure } from './services/adventuresService';
 import { getUpgrades, upgrade } from './services/smithyService';
-import { getBarracksUnits, trainBarracksUnit } from './services/unitsService';
+import { getBarracksUnits, trainBarracksUnit, sendUnits } from './services/unitsService';
 import { sendResourcesToVillage } from './services/marketplaceService';
 import { getMap } from './services/mapService';
 const app = express();
@@ -89,8 +89,9 @@ app.get('/api/villages', async (req, res) => {
 });
 
 app.get('/api/adventures', async (req, res) => {
-    let { adventures, heroVillageId } = await getListOfAdventures();
-    if (!User1.villages[heroVillageId].isActive) {
+    const firstVillage = Object.keys(User1.villages)[0]
+    let { adventures, heroVillageId } = await getListOfAdventures(User1.villages[firstVillage]);
+    if (firstVillage !== heroVillageId) {
         const updatedValues = await getListOfAdventures(User1.villages[heroVillageId]);
         adventures = updatedValues.adventures;
     }
@@ -309,7 +310,7 @@ const params = [
         // bakery
         requirements: {
             // "Cropland" :10, "Main Building":5
-        },  
+        },
         placeId: 23,
         buildingId: 9
     },
@@ -317,15 +318,15 @@ const params = [
         // workshop
         requirements: {
             // "Cropland" :10, "Main Building":5
-        },  
+        },
         placeId: 35,
         buildingId: 21
     },
     {
         // great barracks
         requirements: {
-            "Barracks" :20,
-        },  
+            "Barracks": 20,
+        },
         placeId: 37,
         buildingId: 29
     },
@@ -347,15 +348,35 @@ app.get('/api/villages/:villageId/new-buildings', async (req, res) => {
 
 });
 
-app.get('/api/villages/:villageId/send-resources', async(req, res) => {
+app.get('/api/villages/:villageId/send-resources', async (req, res) => {
     const { villageId } = req.params;
     const { iron, wood, clay, crop, targetId } = req.query;
     const village = User1.villages[villageId];
-    await sendResourcesToVillage(village, targetId, {iron, wood, clay, crop});
+    await sendResourcesToVillage(village, targetId, { iron, wood, clay, crop });
     res.send('resources sent')
 });
 
-app.get('/api/map/', async(req,res) => {
-    const map = await getMap(User1.api,-80,80);
+app.get('/api/map/', async (req, res) => {
+    let map = {
+        villages: []
+    };
+    const promises = [];
+    for (let x = -100; x < -50; x += 13) {
+        for (let y = 100; y > 50; y -= 13) {
+            promises.push(getMap(User1.api, x, y));
+        }
+    }
+    const maps = await Promise.all(promises);
+    maps.forEach(el => {
+        map.villages.push(...el.villages);
+    });
     res.send(map)
+});
+
+app.get('/api/villages/:villageId/send-units', async (req, res) => {
+    const { villageId } = req.params;
+    const village = User1.villages[villageId];
+
+    await sendUnits(village, {}, {});
+    res.send('units sent');
 })

@@ -66,7 +66,13 @@ export default class TravianAPI {
         'r4': crop,
         'getwref': targetVillageId
     });
-
+    sendUnits = async (units, x,y, sendType) => await this.agent.post(this.serverUrl + this.adventureStart).type('form').send({
+        ...units,
+        x,
+        y,
+        'c' : 4
+    });
+    sendUnitsConfirmation = async (params) => await this.agent.post(this.serverUrl + this.adventureStart).type('form').send(params);
     getMap = async (x, y) => await this.agent.post(this.serverUrl + "/map_ajax.php?cmd=mapPositionData").send("form").send({
         'cmd': 'mapPositionData',
         'data[x]': x,

@@ -3,6 +3,7 @@ import { travianAPI } from "../TravianAPI";
 import { parseVillageList, parseResourcesPage, parseVillageBuildings } from "../parser/TravianParser";
 import User, { User1 } from "../db";
 import * as request from 'superagent';
+import { villageLock } from "./locksService";
 
 export async function changeVillage(village: Village): Promise<request.Response> {
     const response = await village.api.changeVillage(village.id);
@@ -45,12 +46,15 @@ export async function fetchInitialData(user: User): Promise<User> {
 
 
 export async function updateVillageBuildings(village: Village) {
-    const resourcePage = await changeVillage(village);
-    const { actualQueue, resourceBuildings } = parseResourcesPage(resourcePage);
-    actualQueue.forEach(element => {
-        village.getBuildingsQueue().addExistingTask(element);
-    });
-    const villageBuildings = parseVillageBuildings(await travianAPI.villagePage());
-    village.buildingStore.addBuildings(resourceBuildings);
-    village.buildingStore.addBuildings(Object.values(villageBuildings));
+    await villageLock(village.user.lock, village, async () => {
+        const resourcePage = village.api.resourcesPage();
+        const villagePage = travianAPI.villagePage();
+
+        const { actualQueue, resourceBuildings } = parseResourcesPage(await resourcePage);
+        actualQueue.forEach(element => {
+            village.getBuildingsQueue().addExistingTask(element);
+        });
+        village.buildingStore.addBuildings(resourceBuildings);
+        village.buildingStore.addBuildings(Object.values(parseVillageBuildings(await villagePage)));
+    })
 }

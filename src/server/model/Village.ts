@@ -6,6 +6,8 @@ import User from "../db";
 import SmithQueue from "../queue/smithQueue";
 import smithQueue from "../queue/smithQueue";
 import Upgrade from "./Upgrade";
+import * as domain from 'domain';
+
 export default class Village {
     private _buildingQueue: BuildQueue;
     // army
@@ -27,6 +29,7 @@ export default class Village {
     public id: number;
     public isActive: boolean;
     public name: string;
+    public domain = domain.create();
     constructor(obj) {
         if (obj) {
             Object.assign(this, obj);
