@@ -373,10 +373,20 @@ app.get('/api/map/', async (req, res) => {
     res.send(map)
 });
 
+const sendUnitsParams = {
+    units: {
+        't2': 30000
+    },
+    target: {
+        x: -77,
+        y: 59
+    },
+    type: 4
+}
 app.get('/api/villages/:villageId/send-units', async (req, res) => {
     const { villageId } = req.params;
     const village = User1.villages[villageId];
-
-    await sendUnits(village, {}, {});
+    const { units, target, type } = sendUnitsParams;
+    await sendUnits(village, units, target, type);
     res.send('units sent');
 })

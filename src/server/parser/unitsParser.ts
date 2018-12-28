@@ -11,5 +11,6 @@ export function parseSendTroops(response: Response) {
         const $el = $(el);
         params[$el.attr("name")] =$el.attr("value");
     })
-    return params
+    const arrivedIn = $res.find(".in").text();
+    return {arrivedIn, params}
 }
