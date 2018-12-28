@@ -5,7 +5,7 @@ import * as AsyncLock from 'async-lock';
 import User from "../db";
 import SmithQueue from "../queue/smithQueue";
 import smithQueue from "../queue/smithQueue";
-import Upgrade from "./upgrade";
+import Upgrade from "./Upgrade";
 export default class Village {
     private _buildingQueue: BuildQueue;
     // army

@@ -7,5 +7,5 @@ export function remove(input : string, elements : Array<string>){
 }
 
 export function removeWhitespaces(input){
-    return input.replace(/\s\s+/g, ' ');
+    return input.replace(/\s\s+/g, ' ').trim();
 }

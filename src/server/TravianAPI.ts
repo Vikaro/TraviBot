@@ -9,7 +9,7 @@ import { parseVillageBuildings, parseActualQueue, parseBuildingPage } from './pa
 import { exportToJsonFile } from './utility/file';
 
 const Settings = {
-    url: "http://www.x1000000.aspidanetwork.com",
+    url: "http://www.x10000.aspidanetwork.com",
     login: "vikaro",
     password: 'jc*a5cv#KJ5RqbYU9$gB'
 }
@@ -24,6 +24,7 @@ export default class TravianAPI {
 
     private serverUrl;
     private resourceUrl = "/dorf1.php";
+    private villageUrl = "/dorf2.php";
     private buildUrl = "/build.php?";
     private adventureUrl = '/hero_adventure.php'
     private adventureStart = '/a2b.php'
@@ -38,53 +39,41 @@ export default class TravianAPI {
     }
     AdventuresPage = async () => await this.agent.get(this.serverUrl + this.adventureUrl);
     AdventureStart = async (adventureId) => await this.agent.post(this.serverUrl + this.adventureStart).type('form').send("a=adventure").send('c=6').send('id=39').send(`h=${adventureId}`);
-    BuildNewBuildingPage = async (placeId, category) => await this.agent.get(this.serverUrl + this.buildUrl + `id=${placeId}&category=${category}`);
-    BuildingPage = async (building: Building) => await this.agent.get(this.serverUrl + "/" + building.url)
 
-    buildingUpgrade = async (building: Building) => await this.agent.get(encodeURI(this.serverUrl + "/" + building.upgradeUrl))
+    newBuildingPage = async (placeId) => await this.agent.get(this.serverUrl + this.buildUrl + `id=${placeId}&category=1`);
+    newBuilding = async (placeId, buildingId, captcha) => {
+        return await this.agent.get(this.serverUrl + this.villageUrl + `?%D0%B0=${buildingId}&id=${placeId}&c=${captcha}`);
+    }
+
+
+    upgradeBuildingPage = async (building: Building) => await this.agent.get(this.serverUrl + "/" + building.url)
+    upgradeBuilding = async (building: Building) => await this.agent.get(encodeURI(this.serverUrl + "/" + building.upgradeUrl))
+
     loginPage = async () => await this.agent.get(this.serverUrl);
     resourcesPage = async () => await this.agent.get(this.serverUrl + this.resourceUrl);
     changeVillage = async (villageId) => await this.agent.get(this.serverUrl + this.resourceUrl + '?newdid=' + villageId);
+
     smithyUpgrade = async (link) => await this.agent.get(this.serverUrl + '/' + link);
-    BuildBuilding = async (building: Building) => {
 
-        let newBuilding = await this.agent.get(this.serverUrl + "/" + building.url).then(res => {
-            // exportToJsonFile(res, "buildingViewResponse");
-            return res;
-        })
-            // .use(superagentCheerio)
-            .then(parseBuildingPage);
+    trainUnits = async (buildingId, unitId, count) => await this.agent.post(this.serverUrl + this.buildUrl).type('form').send(`id=${buildingId}`).send('ft=t1').send(`${unitId}=${count}`);
+    sendResources = async (marketplaceId, targetVillageId, wood, clay, iron, crop) => await this.agent.post(this.serverUrl + this.buildUrl).type("form").send({
+        'ft': 'mk1',
+        'id': marketplaceId,
+        'send3': '1',
+        'r1': wood,
+        'r2': clay,
+        'r3': iron,
+        'r4': crop,
+        'getwref': targetVillageId
+    });
 
-        newBuilding.url = building.url;
-
-        if (newBuilding.upgradeUrl) {
-            console.log(this.serverUrl + "/" + newBuilding.upgradeUrl);
-            var buildRequest = await this.agent.get(encodeURI(this.serverUrl + "/" + newBuilding.upgradeUrl));
-            console.log("NewBuilding Updated");
-            console.log(newBuilding);
-            // BuildingsDb.AddBuildings([newBuilding])
-            return newBuilding;
-        }
-
-        return null;
-    }
-
-    // GetResourceBuildings = async (): Promise<BuildingsStore> => {
-    //     return await this.agent.get(this.serverUrl + "/dorf1.php")
-    //         .use(superagentCheerio)
-    //         .then((res) => {
-    //             // exportToJsonFile(res, "getResourceBuildings");
-    //             let model = new BuildingsStore();
-    //             // @ts-ignore
-    //             var buildingList = res.$(".buildingList .boxes-contents ul li");
-    //             model.ActualQueue = buildingList.map(ParseActualQueue).get();
-
-    //             // @ts-ignore
-    //             var $areas = res.$('.village1 area');
-    //             model.AddBuildings($areas.map(ParseBuildings).get());
-    //             return model;
-    //         })
-    // }
+    getMap = async (x, y) => await this.agent.post(this.serverUrl + "/map_ajax.php?cmd=mapPositionData").send("form").send({
+        'cmd': 'mapPositionData',
+        'data[x]': x,
+        'data[y]': y,
+        'data[zoomLevel]': 2
+    });
+    
     LoginUser = async () => {
         try {
             var loginPage = await this.agent.get(this.serverUrl)
@@ -115,58 +104,7 @@ export default class TravianAPI {
         }
     }
 
-    getVillageBuildings = async (): Promise<Building[]> => {
-        return await this.agent.get(this.serverUrl + "/dorf2.php")
-            .use(superagentCheerio)
-            .then((res) => {
-                // exportToJsonFile(res, "getVillageBuildings");
-                // @ts-ignore
-
-                var buildings: Building[] = parseVillageBuildings(res);
-                return buildings;
-            })
-    }
-
-    TrainUnits = async (buildingId, count) => {
-        let postActionUrl = null;
-        var hiddenParams = await this.agent.get(this.serverUrl + `/build.php?id=${buildingId}`)
-            .use(superagentCheerio)
-            .then(res => {
-                // @ts-ignore
-                postActionUrl = res.$("form[method='post']").attr("action");
-                // @ts-ignore
-                var hiddenInputs = res.$("form[method='post'] input[type='hidden']");
-                var parameters = hiddenInputs.map((index, el) => {
-                    return {
-                        [el.name]: el.value
-                    }
-                }).get();
-                return parameters;
-            });
-        if (postActionUrl) {
-            var queryParams = {};
-            hiddenParams.forEach(element => {
-                queryParams = {
-                    ...queryParams,
-                    ...element
-                }
-            });
-            return await this.agent.post(this.serverUrl + `/${postActionUrl}`)
-                .type('form')
-                .query(queryParams)
-        }
-        return null;
-        // return await this.agent.post(this.serverUrl + `/${actionUrl}`)
-        //     .type('form')
-        //     // .send(`name=${Settings.login}`)
-        //     // .send(`password=${Settings.password}`)
-        //     // .send("s1=Login")
-        //     .query()
-        //     .send(`user=${Settings.login}`)
-        //     .send(`pw=${Settings.password}`)
-        //     .send(`ft=a4`)
-        //     .send("w=100:100")
-    }
+    villagePage = async () => await this.agent.get(this.serverUrl + "/dorf2.php")
 }
 
 

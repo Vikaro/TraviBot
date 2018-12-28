@@ -5,7 +5,7 @@ import User from '../db';
 import { changeVillage } from '../services/villageService';
 import { delay } from '../utility/Duration';
 import * as smithService from '../services/smithyService';
-import Upgrade from '../model/upgrade';
+import Upgrade from '../model/Upgrade';
 import Village from '../model/Village';
 
 export default class smithQueue {

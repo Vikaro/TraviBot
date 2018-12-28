@@ -1,7 +1,7 @@
 import Duration from "../utility/Duration";
 
 const max20level = ['Cropland', 'Iron Mine', 'Clay Pit', 'Woodcutter', 'Marketplace', 'Granary', 'Rally Point', 'Earth Wall', 'Marketplace', 'Smithy', 'Heromansion', 'Main Building']
-const max10level = ['Warehouse', 'Academy', 'Treasury']
+const max10level = ['Warehouse', 'Academy', 'Treasury', 'Cranny']
 const unknownLevel = ['Residence', 'Embassy']
 
 export const maxLevel = "max";
@@ -22,6 +22,7 @@ export default class Building {
             Object.assign(this, obj);
             this.id = this._setId();
             this.level = this._setLevel();
+            this.maxLevel = this._getMaxLevel(this.name);
         }
     }
     // constructor(name: string, href: string, resources: Array<Object>, duration: string) {
@@ -34,8 +35,8 @@ export default class Building {
     // }
 
     private _getMaxLevel(name) {
-        if (max20level.filter(item => item === name).length > 0) this.maxLevel = 20;
-        if (max10level.filter(item => item === name).length > 0) this.maxLevel = 10;
+        if (max20level.filter(item => name.includes(item))) return 20;
+        if (max10level.filter(item => name.includes(item))) return 10;
     }
 
     private _setId(): string {
@@ -46,7 +47,7 @@ export default class Building {
         return undefined;
     }
 
-    public _setLevel() {
+    private _setLevel() {
         if (this.level) {
             if (typeof (this.level) == "string") {
                 this.level = this.level.replace(/level/ig, '')

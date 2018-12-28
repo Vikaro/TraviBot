@@ -2,11 +2,14 @@ import * as $ from 'cheerio';
 import Building, { maxLevel } from '../model/Building';
 import { Response } from 'superagent';
 import Adventure from '../model/adventure';
+import { remove } from '../utility/text';
 
-export function parseVillageBuildings(res): Array<Building> {
+export function parseVillageBuildings(res): { [key: string]: Building } {
     const $res = $(res.text);
     const $areas = $res.find('#village_map area');
-    const buildings = $areas.map((index, el) => {
+    let buldings = {};
+
+    $areas.each((index, el) => {
         let level = maxLevel;
         const $el = $(el);
         const url = $el.attr('href');
@@ -14,18 +17,29 @@ export function parseVillageBuildings(res): Array<Building> {
         const title = $el.attr('title');
 
         const $title = $(title);
-        var name = $title.first().text() || $res.find(`.building.${getBuildingName(id)}`).attr("alt") || "Empty place";
+        let name;
+        if(id=== '40'){
+            name = $res.find(`.wall`).attr("alt") || "Empty place"
+        } 
+        else {
+            name = $title.first().text() || getBuilding($res.find(`.building, .dx1`), id).attr("alt") || "Empty place";
+        }
+        if (id === '39' && name === 'Rally Point ') {
+            name = "Empty place";
+        }
+
         const resources = $title.children().map(parseResourcesTypes).get();
-        const splittedName = name.split("level");
+        const splittedName = name ? name.split("level") : [];
 
         if (splittedName.length > 1) {
             if (splittedName[1]) level = splittedName[1].trim();
         }
 
-        return new Building({ name, url, resources, level });
+        buldings[id] = new Building({ name, url, resources, level });
     });
-    return buildings.get();
+    return buldings;
 }
+
 
 export function parseResourceBuildings(res): Array<Building> {
     const $res = $(res.text);
@@ -38,7 +52,7 @@ export function parseResourceBuildings(res): Array<Building> {
         const title = $el.attr('title');
 
         const $title = $(title);
-        var name = $title.first().text() || $res.find(`.building.${getBuildingName(id)}`).attr("alt") || "Empty place";
+        var name = $title.first().text() || getBuilding($res.find(`.building`), id).attr("alt") || "Empty place";
         const resources = $title.children().map(parseResourcesTypes).get();
         const splittedName = name.split("level");
 
@@ -50,7 +64,9 @@ export function parseResourceBuildings(res): Array<Building> {
     });
     return buildings.get();
 }
-
+function getBuilding(el: Cheerio, id) {
+    return el.eq(id - 19);
+}
 function getBuildingName(id) {
     switch (id) {
         case '19': return 'g26'

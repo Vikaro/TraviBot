@@ -15,6 +15,7 @@ export default class User {
   public adventures: {[id:string] : Adventure} = {};
   public heroVillageId;
   public lock = new AsyncLock();
+  public api = travianAPI;
 }
 
 export const User1 = new User();

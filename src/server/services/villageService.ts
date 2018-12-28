@@ -1,6 +1,6 @@
 import Village from "../model/Village";
 import { travianAPI } from "../TravianAPI";
-import { parseVillageList, parseResourcesPage } from "../parser/TravianParser";
+import { parseVillageList, parseResourcesPage, parseVillageBuildings } from "../parser/TravianParser";
 import User, { User1 } from "../db";
 import * as request from 'superagent';
 
@@ -8,6 +8,7 @@ export async function changeVillage(village: Village): Promise<request.Response>
     const response = await village.api.changeVillage(village.id);
     setAllVillagesAsInactive(village.user);
     village.isActive = true;
+    console.log(`Changed village to ${village.name}`);
     return response;
 }
 
@@ -36,20 +37,20 @@ export async function fetchInitialData(user: User): Promise<User> {
     user.villages = villages;
     for (const villageId in user.villages) {
         const village = user.villages[villageId];
-        await getVillageBuildings(village);
+        await updateVillageBuildings(village);
     }
 
     return user;
 }
 
 
-export async function getVillageBuildings(village: Village) {
+export async function updateVillageBuildings(village: Village) {
     const resourcePage = await changeVillage(village);
     const { actualQueue, resourceBuildings } = parseResourcesPage(resourcePage);
     actualQueue.forEach(element => {
-        village.getBuildingsQueue().addExistingBuilding(element);
+        village.getBuildingsQueue().addExistingTask(element);
     });
-    const villageBuildings = await travianAPI.getVillageBuildings()
+    const villageBuildings = parseVillageBuildings(await travianAPI.villagePage());
     village.buildingStore.addBuildings(resourceBuildings);
-    village.buildingStore.addBuildings(villageBuildings);
+    village.buildingStore.addBuildings(Object.values(villageBuildings));
 }

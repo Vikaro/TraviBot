@@ -3,28 +3,49 @@ import { objectFilterKey } from '../utility/object';
 
 const maxBuildingQueue = 5;
 export default class BuildingsStore {
-    public avilableBuildings: {} = {}
+    public availableBuildings: { [key: string]: Building } = {}
     // public actualQueue: Building[] = [];
 
-    public GetUpgreadableBuildings(): Building[] {
-        return this.GetBuildings().filter(el => el.level !== maxLevel)
+    public getUpgreadableBuildings(): Building[] {
+        return this.getBuildings()
+        .filter(el => el.level !== maxLevel 
+            && (el.maxLevel !== undefined && el.level < el.maxLevel))
             .sort((a, b) => a.level - b.level);
     }
-
-    public GetSmithy() : Building {
-        return this.GetBuildings().find(el => el.name.includes('Smithy'))
+    public getByName(name): Building { return this.getBuildings().find(el => el.name.toLowerCase().includes(name.toLowerCase())) };
+    public getSmithy(): Building {
+        return this.getBuildings().find(el => el.name.includes('Smithy'))
+    }
+    public getMarketplace(): Building {
+        return this.getBuildings().find(el => el.name.includes('Marketplace'))
     }
 
-    public GetAcademy(): Building {
-        return this.GetBuildings().find(el => el.name.includes('Academy'))
+    public getAcademy(): Building {
+        return this.getBuildings().find(el => el.name.includes('Academy'))
     }
 
-    public GetTownHall(): Building {
-        return this.GetBuildings().find(el => el.name.includes('Town Hall'))
+    public getTownHall(): Building {
+        return this.getBuildings().find(el => el.name.includes('Town Hall'))
     }
 
-    public GetBuildings(): Array<Building> {
-        return Object.values(this.avilableBuildings)
+    public getBarracks(): Building {
+        return this.getBuildings().find(el => el.name.includes('Barracks'))
+    }
+
+    public getGreatBarracks(): Building {
+        return this.getBuildings().find(el => el.name.includes('Great Barracks'))
+    }
+
+    public getStable(): Building {
+        return this.getBuildings().find(el => el.name.includes('Stable'))
+    }
+
+    public getGreatStable(): Building {
+        return this.getBuildings().find(el => el.name.includes('Great Stable'))
+    }
+
+    public getBuildings(): Array<Building> {
+        return Object.values(this.availableBuildings)
     }
 
     public addBuildings(buildings: Array<Building>) {
@@ -34,15 +55,15 @@ export default class BuildingsStore {
             newBuildings[building.id] = building;
         });
 
-        this.avilableBuildings = {
-            ...this.avilableBuildings,
+        this.availableBuildings = {
+            ...this.availableBuildings,
             ...newBuildings
         }
     }
 
     public removeBuilding(building: Building) {
-        var newAvailableBuildings = objectFilterKey(this.avilableBuildings, obj => obj !== building.id)
-        this.avilableBuildings = newAvailableBuildings;
+        var newAvailableBuildings = objectFilterKey(this.availableBuildings, obj => obj !== building.id)
+        this.availableBuildings = newAvailableBuildings;
         return newAvailableBuildings;
     }
 }

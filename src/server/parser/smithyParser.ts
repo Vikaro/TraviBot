@@ -1,7 +1,7 @@
 import * as $ from 'cheerio';
 import { Response } from 'superagent';
 import { remove, removeWhitespaces } from '../utility/text';
-import Upgrade from '../model/upgrade';
+import Upgrade from '../model/Upgrade';
 
 export function parseSmithyPage(response: Response): { [key: string]: Upgrade } {
     const $res = $(response.text);
