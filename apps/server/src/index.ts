@@ -14,6 +14,7 @@ import { getUpgrades, upgrade } from './services/smithyService';
 import { getBarracksUnits, trainBarracksUnit, sendUnits } from './services/unitsService';
 import { sendResourcesToVillage } from './services/marketplaceService';
 import { getMap } from './services/mapService';
+import * as cors from 'cors';
 const app = express();
 
 
@@ -21,6 +22,7 @@ const app = express();
 
 // var buildQueue = new BuildQueue();
 app.use(express.static('dist'));
+app.use(cors());
 app.get('/api/getUsername', (req, res) => res.send({ username: os.userInfo().username }));
 app.listen(8080, () => console.log('Listening on port 8080!'));
 

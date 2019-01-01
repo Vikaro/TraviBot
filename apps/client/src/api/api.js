@@ -1,7 +1,7 @@
 import Axios from "../../node_modules/axios/index";
 
 const api = Axios.create({
-    baseURL: 'localhost:8080/api'
+    baseURL: 'http://localhost:8080/api'
 })
 
 export async function fetchBeers(filter) {
@@ -9,4 +9,8 @@ export async function fetchBeers(filter) {
         params: { food: filter }
     })
     return data
+}
+
+export async function login(){
+  return await api.get('/login')
 }
