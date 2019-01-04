@@ -70,7 +70,7 @@ class App extends React.Component {
     return (
       <div className={classes.wrapper}>
         <Sidebar
-          routes={dashboardRoutes}
+          routes={dashboardRoutes.filter(i=> i.sidebar !== false)}
           logoText={"Creative Tim"}
           logo={logo}
           image={image}

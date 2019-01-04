@@ -6,10 +6,12 @@ import User from '../db';
 import { changeVillage } from '../services/villageService';
 import { startAdventure } from '../services/adventuresService';
 import { delay } from '../utility/Duration';
+import Village from '../model/Village';
 
 export default class adventuresQueue {
     private queue: Queue;
     private _user: User;
+    private _village: Village;
     constructor(user) {
         this._user = user;
         this.queue = new Queue(this.process, { maxRetries: 10, retryDelay: 1000 });
@@ -41,10 +43,10 @@ export default class adventuresQueue {
         var task = new QueueTask(`${adventure.id}`, () => new Promise(async (resolve, reject) => {
             // let updatedBuilding: Building, duration;
             try {
-                const { heroVillageId } = this._user;
-                if (!this._user.villages[heroVillageId].isActive) await changeVillage(this._user.villages[heroVillageId])
+                // const { heroVillageId } = this._user;
+                // if (!this._user.villages[heroVillageId].isActive) await changeVillage(this._user.villages[heroVillageId])
 
-                await startAdventure(adventure)
+                await startAdventure(this._village,adventure)
 
                 await delay(adventure.moveTime);
                 await delay(adventure.moveTime);
@@ -59,5 +61,8 @@ export default class adventuresQueue {
         }));
         this.queue.push(task);
         console.log("Added new adventure to queue");
+    }
+    setNewHeroVillage(village: Village){
+        this._village = village;
     }
 }

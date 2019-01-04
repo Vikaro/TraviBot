@@ -20,6 +20,8 @@ import Login from "views/Login/Login";
 import appStore from "store/store";
 import { view } from "react-easy-state";
 import Village from "views/Village/Village";
+import VillagesDashboard from "views/Dashboard/VillagesDashboard";
+import Adventures from "views/Adventures/Adventures";
 
 export let dashboardRoutes = [
   {
@@ -36,12 +38,28 @@ export let dashboardRoutes = [
     icon: Dashboard,
     component: DashboardPage
   },
+ 
   {
-    path: "/village/:villageId",
+    path: "/adventures",
+    sidebarName: "Adventures",
+    navbarName: "Adventures",
+    icon: Dashboard,
+    component: Adventures
+  },
+  {
+    path: "/villages/:villageId",
     sidebarName: "Village",
     navbarName: "Village",
     icon: Dashboard,
-    component: Village
+    component: Village,
+    sidebar: false
+  },
+   {
+    path: "/villages",
+    sidebarName: "Villages",
+    navbarName: "Villages",
+    icon: Dashboard,
+    component: VillagesDashboard
   },
   // {
   //   path: "/user",

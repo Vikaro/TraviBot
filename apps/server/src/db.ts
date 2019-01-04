@@ -13,9 +13,8 @@ export default class User {
   public villages: { [id: string]: Village } = {};
   public adventuresQueue = new adventuresQueue(this);
   public adventures: {[id:string] : Adventure} = {};
-  public heroVillageId;
   public lock = new AsyncLock({ domainReentrant: true });
-  public api = travianAPI;
+  // public api = travianAPI;
 }
 
 export const User1 = new User();

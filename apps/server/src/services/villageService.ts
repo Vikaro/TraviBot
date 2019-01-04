@@ -1,6 +1,6 @@
 import Village from "../model/Village";
-import { travianAPI } from "../TravianAPI";
-import { parseVillageList, parseResourcesPage, parseVillageBuildings } from "../parser/TravianParser";
+import TravianAPI, { travianAPI } from "../TravianAPI";
+import { parseVillageList, parseResourcesPage, parseVillageBuildings, parseTroops } from "../parser/TravianParser";
 import User, { User1 } from "../db";
 import * as request from 'superagent';
 import { villageLock } from "./locksService";
@@ -23,38 +23,64 @@ export async function setAllVillagesAsInactive(user: User) {
 }
 
 export async function fetchInitialData(user: User): Promise<User> {
-    let resourcePage = await travianAPI.resourcesPage();
-    const parsedVillages = parseVillageList(resourcePage);
-    let villages = {};
+    const loginRes = await travianAPI.LoginUser();
+    // let resourcePage = await travianAPI.resourcesPage();
+    const parsedVillages = parseVillageList(loginRes);
+    const promises = [];
     for (const parsedVillage of parsedVillages) {
-        villages[parsedVillage.id] = new Village({
-            api: travianAPI,
-            id: parsedVillage.id,
-            isActive: parsedVillage.isActive,
-            name: parsedVillage.name,
-            user: user
-        })
+        promises.push(createVillageContext(user, parsedVillage));
+        // const villageAPI = new TravianAPI();
+        // await villageAPI.LoginUser();
+        // await villageAPI.changeVillage(parsedVillage.id);
+        // villages[parsedVillage.id] = new Village({
+        //     api: villageAPI,
+        //     id: parsedVillage.id,
+        //     isActive: parsedVillage.isActive,
+        //     name: parsedVillage.name,
+        //     user,
+        // });
     }
-    user.villages = villages;
-    for (const villageId in user.villages) {
-        const village = user.villages[villageId];
-        await updateVillageBuildings(village);
-    }
-
+    // user.villages = villages;
+    // for (const villageId in user.villages) {
+    //     const village = user.villages[villageId];
+    //     await updateVillageBuildings(village);
+    // }
+    const villagesArr = await Promise.all(promises);
+    villagesArr.forEach((village: Village) => {
+        user.villages[village.id] = village;
+    });
     return user;
 }
 
+async function createVillageContext(user: User, villageDetails: any): Promise<Village> {
+    const villageAPI = new TravianAPI();
+    await villageAPI.LoginUser();
+    await villageAPI.changeVillage(villageDetails.id);
+    const village = new Village({
+        api: villageAPI,
+        id: villageDetails.id,
+        isActive: villageDetails.isActive,
+        name: villageDetails.name,
+        user,
+    });
+    await updateVillageInformation(village);
+    return village;
+}
 
-export async function updateVillageBuildings(village: Village) {
+export async function updateVillageInformation(village: Village) {
     await villageLock(village.user.lock, village, async () => {
         const resourcePage = village.api.resourcesPage();
-        const villagePage = travianAPI.villagePage();
+        const villagePage = village.api.villagePage();
 
-        const { actualQueue, resourceBuildings } = parseResourcesPage(await resourcePage);
+        const resourceData = await resourcePage;
+        const { actualQueue, resourceBuildings } = parseResourcesPage(resourceData);
         actualQueue.forEach(element => {
             village.getBuildingsQueue().addExistingTask(element);
         });
+        const villageData = Object.values(parseVillageBuildings(await villagePage));
+        
         village.buildingStore.addBuildings(resourceBuildings);
-        village.buildingStore.addBuildings(Object.values(parseVillageBuildings(await villagePage)));
-    })
+        village.buildingStore.addBuildings(villageData);
+        village.unitsStore.addUnits(parseTroops(resourceData));
+    });
 }

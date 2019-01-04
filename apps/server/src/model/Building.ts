@@ -1,6 +1,6 @@
 import Duration from "../utility/Duration";
 
-const max20level = ['Cropland', 'Iron Mine', 'Clay Pit', 'Woodcutter', 'Marketplace', 'Granary', 'Rally Point', 'Earth Wall', 'Marketplace', 'Smithy', 'Heromansion', 'Main Building']
+const max20level = ['Cropland', 'Iron Mine', 'Clay Pit', 'Woodcutter', 'Marketplace', 'Granary', 'Rally Point', 'Wall', 'Marketplace', 'Smithy', 'Heromansion', 'Main Building']
 const max10level = ['Warehouse', 'Academy', 'Treasury', 'Cranny']
 const unknownLevel = ['Residence', 'Embassy']
 

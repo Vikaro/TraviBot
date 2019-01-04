@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "module": "es6",
-    "baseUrl": "./src"
+    "baseUrl": "./src",
+    "experimentalDecorators": true
   },
   "exclude": [
     "node_modules"

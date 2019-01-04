@@ -6,7 +6,7 @@ import TravianAPI from '../TravianAPI';
 
 import { upgradeBuilding } from '../services/buildingsService'
 import Village from '../model/Village';
-import { changeVillage, updateVillageBuildings } from '../services/villageService';
+import { changeVillage, updateVillageInformation } from '../services/villageService';
 import * as AsyncLock from 'async-lock';
 import { parseNewBuildingCaptcha } from '../parser/buildingsParser';
 import { villageLock } from '../services/locksService';
@@ -58,7 +58,7 @@ export default class BuildQueue {
                 try {
                     await villageLock(this._lock, this._village, async () => {
                         console.log(`${this._village.name} :: ${building.name} :: upgrade building`);
-                        updatedBuilding = await upgradeBuilding(building);
+                        updatedBuilding = await upgradeBuilding(this._village, building);
                         console.log(`${this._village.name} :: ${building.name} :: upgrade building is finished`);
                         this._village.buildingStore.addBuildings([updatedBuilding]);
                         duration = updatedBuilding.duration;
@@ -88,23 +88,24 @@ export default class BuildQueue {
         console.log("Added existing building to queue");
     }
 
-    addNewBuilding = async (params) => {
+    addNewBuilding = (params) => {
         const { placeId, buildingId, requirements } = params;
         var task = new QueueTask(`${placeId}-${buildingId}`, () => new Promise(async (resolve, reject) => {
             await villageLock(this._lock, this._village, async () => {
                 if (requirements) {
                     for (const key in requirements) {
-                        const element = requirements[key];
+                        const level = requirements[key];
                         const building = this._village.buildingStore.getByName(key);
                         if (!building) {
                             console.error(`${this._village.name} :: ${placeId} :: cannot build - requiured ${key} but it's not exist in village`);
                             resolve();
                             return;
                         }
-                        if (parseInt(building.level) < element) {
-                            console.error(`${this._village.name} :: ${placeId} :: cannot build - requiured ${building.name} level ${element} but ${building.level} is built`);
-                            resolve();
-                            return;
+                        if (parseInt(building.level) < level) {
+                            this.upgradeToRequirements(key, level);
+                            // console.error(`${this._village.name} :: ${placeId} :: cannot build - requiured ${building.name} level ${element} but ${building.level} is built`);
+                            // resolve();
+                            // return;
                         }
                     }
                 }
@@ -118,12 +119,19 @@ export default class BuildQueue {
                     return;
                 }
                 const response = await this._village.api.newBuilding(placeId, buildingId, captcha);
-                updateVillageBuildings(this._village);
+                updateVillageInformation(this._village);
                 await delay("0:0:2");
                 resolve();
             })
         }));
         this.queue.push(task);
         console.log("Added new building to queue");
+    }
+
+    upgradeToRequirements = (buildingName, requiredLevel ) => {
+        const building = this._village.buildingStore.getByName(buildingName);
+        for (let level = 0; level < requiredLevel - building.level; level++) {
+            upgradeBuilding(this._village, building);
+        }
     }
 }

@@ -11,6 +11,6 @@ export async function getListOfAdventures(capitalVillage? : Village) : Promise<a
     })
 }
 
-export async function startAdventure({id}){
-     await travianAPI.AdventureStart(id);
+export async function startAdventure(village: Village,{id}){
+     await village.api.AdventureStart(id);
 }

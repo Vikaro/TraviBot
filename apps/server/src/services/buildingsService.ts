@@ -4,13 +4,13 @@ import { parseBuildingPage, parseVillageList, parseResourcesPage } from "../pars
 import User, { User1 } from "../db";
 import { exportToJsonFile } from "../utility/file";
 import Village from "../model/Village";
-import { updateVillageBuildings } from "./villageService";
+import { updateVillageInformation } from "./villageService";
 import { parseNewBuildingCaptcha } from "../parser/buildingsParser";
 
 // User is set as constant to User1 - Need fix
 
-export async function upgradeBuilding(building: Building): Promise<Building> {
-    const buildingFromPage = parseBuildingPage(await travianAPI.upgradeBuildingPage(building));
+export async function upgradeBuilding(village : Village, building: Building): Promise<Building> {
+    const buildingFromPage = parseBuildingPage(await village.api.upgradeBuildingPage(building));
     const updatedBuilding = new Building({
         ...building,
         ...buildingFromPage
@@ -18,7 +18,7 @@ export async function upgradeBuilding(building: Building): Promise<Building> {
 
     if (buildingFromPage.level !== maxLevel || buildingFromPage.level < buildingFromPage.maxLevel    ) {
         if (!buildingFromPage.upgradeUrl) throw new Error(`Error: ${buildingFromPage.name} :: ${buildingFromPage.id} - upgrade url not found`);
-        const buildUpgradeResponse = await travianAPI.upgradeBuilding(buildingFromPage);
+        const buildUpgradeResponse = await village.api.upgradeBuilding(buildingFromPage);
         if (!isNaN(buildingFromPage.level))++buildingFromPage.level;
     } else {
         console.log(`${buildingFromPage.name} :: level: ${buildingFromPage.level} is max level`);
@@ -34,7 +34,7 @@ export async function autoUpgrade(village: Village) {
     let actualBuilding = undefined;
 
     const autoBuildFunction = async () => {
-        const updateFunc = updateVillageBuildings(village)
+        const updateFunc = updateVillageInformation(village)
         const sorted = buildingStore.getUpgreadableBuildings();
         if (sorted.length > 0) {
             buildQueue.upgradeBuilding(sorted[0].id, autoBuildFunction);
@@ -53,7 +53,7 @@ export async function autoUpgrade(village: Village) {
 
 export async function addNewBuilding(village: Village, params) {
     const { placeId, buildingId, requirements } = params;
-    const place = village.buildingStore.availableBuildings[placeId];
+    const place = village.buildingStore.buildings[placeId];
     if (!place || !(place.name === 'Empty place' || place.name === 'Construction Site')) {
         console.error(`${village.name} :: ${placeId} :: error - something is already built on this place`);
         return;

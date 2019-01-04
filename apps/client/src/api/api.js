@@ -11,6 +11,23 @@ export async function fetchBeers(filter) {
     return data
 }
 
-export async function login(){
-  return await api.get('/login')
+export async function login() {
+    return api.get('/login')
 }
+
+export async function autoBuild() {
+    return api.get('/buildings/auto')
+}
+
+export async function fetchAdventures() {
+    return api.get('/adventures')
+}
+export async function runAllAdventures() {
+    return api.get('/adventures/auto')
+}
+export async function fetchVillages() { return api.get('/villages') }
+
+export async function autoBuildVillage(villageId) { return api.get(`/villages/${villageId}/new-buildings`)}
+export async function smithyUpgrades(villageId) { return api.get(`/villages/${villageId}/smithy`)}
+export async function smithyAutoUpgrade(villageId) { return api.get(`/villages/${villageId}/smithy/auto`)}
+export async function smithyUpgrade(villageId, upgradeId) { return api.get(`/villages/${villageId}/smithy/${upgradeId}`)}
