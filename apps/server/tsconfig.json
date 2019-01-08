@@ -8,6 +8,7 @@
     "module": "commonjs",
     "target": "es5",
     "lib": ["es2017", "dom"],
-    "sourceMap": true
+    "sourceMap": true,
+    "downlevelIteration": true
   }
 }

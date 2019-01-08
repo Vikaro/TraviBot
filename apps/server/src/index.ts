@@ -9,13 +9,15 @@ import { getMap } from './services/mapService';
 import { sendResourcesToVillage } from './services/marketplaceService';
 import { getUpgrades } from './services/smithyService';
 import { getBarracksUnits, sendUnits, trainBarracksUnit } from './services/unitsService';
-import { fetchInitialData } from './services/villageService';
+import { fetchInitialData, updateVillageInformation } from './services/villageService';
+import RepeatableTask from './model/RepeatableTask';
 
 const app = express();
 
 // var buildQueue = new BuildQueue();
 app.use(express.static('dist'));
 app.use(cors());
+app.use(express.json());
 app.get('/api/getUsername', (req, res) => res.send({ username: os.userInfo().username }));
 app.listen(8080, () => console.log('Listening on port 8080!'));
 
@@ -117,6 +119,14 @@ app.get('/api/adventures/:id', async (req, res) => {
 });
 
 app.get('/api/villages', async (req, res) => {
+  let promises = [];
+  for (const villageId in User1.villages) {
+    if (User1.villages.hasOwnProperty(villageId)) {
+      const village = User1.villages[villageId];
+      promises.push(updateVillageInformation(village));
+    }
+  }
+  await Promise.all(promises);
   res.send(serializeUserVillages(User1));
 });
 app.get('/api/villages/:villageId/smithy', async (req, res) => {
@@ -340,16 +350,14 @@ app.get('/api/villages/:villageId/new-buildings', async (req, res) => {
   const { villageId } = req.params;
   const village = User1.villages[villageId];
   // const { placeId, buildingId } = req.query;
-  await params.forEach(async element => {
-    const { placeId, buildingId } = element;
-    if (!placeId || !buildingId) {
-      res.send('parameter placeId or buildingId is not found');
-      return;
-    }
-    console.log(placeId, buildingId);
-    await addNewBuilding(village, element);
-  });
-  res.send('buildings aded');
+  const func = index => {
+    if (params.length <= index) return;
+    addNewBuilding(village, params[index], () => func(++index));
+  };
+  if (params.length > 0) {
+    addNewBuilding(village, params[0], () => func(0));
+  }
+  res.send('buildings added');
 });
 
 app.get('/api/villages/:villageId/send-resources', async (req, res) => {
@@ -388,10 +396,22 @@ const sendUnitsParams = {
   },
   type: 4
 };
-app.get('/api/villages/:villageId/send-units', async (req, res) => {
+app.post('/api/villages/:villageId/send-units', async (req, res) => {
   const { villageId } = req.params;
+  console.log(req.body);
   const village = User1.villages[villageId];
-  const { units, target, type } = sendUnitsParams;
-  await sendUnits(village, units, target, type);
+  const { units, target, type, repeat } = req.body;
+  if(repeat){
+    const task = new RepeatableTask({
+      name: repeat.name,
+      id: Object.keys(User1.repeatableUnitTasks.tasks).length,
+      time: repeat.time,
+      callback: () => sendUnits(village, units, target, type)
+    });
+    User1.repeatableUnitTasks.tasks[task.getId()] = task;
+    task.start();
+  } else {
+    await sendUnits(village, units, target, type);
+  }
   res.send('units sent');
 });

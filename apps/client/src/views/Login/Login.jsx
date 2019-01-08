@@ -61,7 +61,6 @@ class Login extends Component {
                                 fullWidth: true,
                                 onChange: onChange
                             }}
-                            
                         />
                         <p className={classes.description}>
                             Don't be scared of the truth because we need to restart the

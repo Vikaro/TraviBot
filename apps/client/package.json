@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^3.7.1",
     "@material-ui/icons": "^3.0.1",
+    "@material-ui/lab": "^3.0.0-alpha.27",
     "@types/axios": "^0.14.0",
     "@types/googlemaps": "^3.30.16",
     "@types/jest": "^23.3.10",

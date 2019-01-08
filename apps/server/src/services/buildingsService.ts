@@ -1,13 +1,8 @@
 import Building, { maxLevel } from "../model/Building";
-import TravianAPI, { travianAPI } from "../TravianAPI";
 import { parseBuildingPage, parseVillageList, parseResourcesPage } from "../parser/TravianParser";
-import User, { User1 } from "../db";
-import { exportToJsonFile } from "../utility/file";
 import Village from "../model/Village";
 import { updateVillageInformation } from "./villageService";
-import { parseNewBuildingCaptcha } from "../parser/buildingsParser";
 
-// User is set as constant to User1 - Need fix
 
 export async function upgradeBuilding(village : Village, building: Building): Promise<Building> {
     const buildingFromPage = parseBuildingPage(await village.api.upgradeBuildingPage(building));
@@ -51,14 +46,15 @@ export async function autoUpgrade(village: Village) {
     return null;
 }
 
-export async function addNewBuilding(village: Village, params) {
+export async function addNewBuilding(village: Village, params, callback?) {
     const { placeId, buildingId, requirements } = params;
     const place = village.buildingStore.buildings[placeId];
     if (!place || !(place.name === 'Empty place' || place.name === 'Construction Site')) {
         console.error(`${village.name} :: ${placeId} :: error - something is already built on this place`);
+        callback();
         return;
     }
     
     const buildQueue = village.getBuildingsQueue();
-    buildQueue.addNewBuilding(params);
+    buildQueue.addNewBuilding(params, callback);
 }

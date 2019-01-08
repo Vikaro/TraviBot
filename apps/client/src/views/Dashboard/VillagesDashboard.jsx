@@ -34,7 +34,7 @@ class VillagesDashboard extends Component {
                     <GridItem xs={12} sm={12} md={12}>
                         <Card >
                             <RegularButton color="primary" disabled={appStore.autoBuildEnabled} round onClick={this.handleAutoBuild}>
-                                <div>Auto build in every village</div>
+                                <div>Turn on auto upgrade buildings in every village</div>
                         </RegularButton>
                         </Card>
                     </GridItem>
@@ -73,4 +73,5 @@ const VillageCard = ({ village, classes }) => {
         </GridItem>
     )
 }
+
 

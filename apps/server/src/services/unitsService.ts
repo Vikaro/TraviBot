@@ -24,7 +24,7 @@ export async function trainBarracksUnit(village: Village, unitId, count) {
 export async function sendUnits(village: Village, units, { x, y }, type) {
     await villageLock(village.user.lock, village, async () => {
         console.log(units);
-        const response = await village.api.sendUnits(units, x, y, type);
+        const response = await village.api.sendUnits(units, x, y, parseInt(type));
         const { arrivedIn, params } = parseSendTroops(response);
         console.log(arrivedIn, params);
         const confirmation = await village.api.sendUnitsConfirmation(params);

@@ -212,13 +212,28 @@ export function parseTroops(res: Response) {
   const troopsTable = $res.find('#troops tbody tr');
   const troopsList = troopsTable.map((index, row) => {
     const $el = $(row);
-    if ($el.find("td").length > 1) {
-      const available = $el.find('.num').text();
+    if ($el.find('td').length > 1) {
+      const available = parseInt(
+        $el
+          .find('.num')
+          .text()
+          .replace(/\./g, '')
+      );
       const name = $el.find('.un').text();
-      const id = $el
+      const unitClass = $el
         .find('.unit')
         .attr('class')
-        .replace('unit', '');
+        .replace('unit', '')
+        .replace('u', 't')
+        .trim();
+      let id = 't';
+      if (unitClass === 'thero') {
+        id += '11';
+      } else if (unitClass === 't10') {
+        id += '1' + unitClass.substr(unitClass.length - 1);
+      } else {
+        id += unitClass.substr(unitClass.length - 1);
+      }
       return new Unit({ id, name, available });
     }
   });
@@ -226,7 +241,7 @@ export function parseTroops(res: Response) {
 }
 
 /** Get village list from resources page */
-export function parseVillageList(res: Response): Array<any> {
+export function parseVillageList(res: Response): Array<object> {
   const $res = $(res.text);
   const idParam = '?newdid=';
   const villagesArray = $res.find('#sidebarBoxVillagelist li').map((index, el) => {

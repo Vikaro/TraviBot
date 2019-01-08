@@ -9,8 +9,8 @@ import { parseVillageBuildings, parseActualQueue, parseBuildingPage } from './pa
 import { exportToJsonFile } from './utility/file';
 
 const Settings = {
-    url: "http://www.x10000.aspidanetwork.com",
-    login: "vikaro",
+    url: "http://www.x5000000.aspidanetwork.com",
+    login: "llllllll",
     password: 'jc*a5cv#KJ5RqbYU9$gB'
 }
 
@@ -67,10 +67,13 @@ export default class TravianAPI {
         'getwref': targetVillageId
     });
     sendUnits = async (units, x,y, sendType) => await this.agent.post(this.serverUrl + this.adventureStart).type('form').send({
+        t5: null,
+        t11: null,
         ...units,
         x,
         y,
-        'c' : 4
+        'c' : sendType,
+        's1': 'ok'
     });
     sendUnitsConfirmation = async (params) => await this.agent.post(this.serverUrl + this.adventureStart).type('form').send(params);
     getMap = async (x, y) => await this.agent.post(this.serverUrl + "/map_ajax.php?cmd=mapPositionData").send("form").send({
@@ -115,4 +118,3 @@ export default class TravianAPI {
 
 
 
-export const travianAPI = new TravianAPI();

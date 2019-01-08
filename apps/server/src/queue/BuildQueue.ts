@@ -88,7 +88,7 @@ export default class BuildQueue {
         console.log("Added existing building to queue");
     }
 
-    addNewBuilding = (params) => {
+    addNewBuilding = (params, callback? : () => void) => {
         const { placeId, buildingId, requirements } = params;
         var task = new QueueTask(`${placeId}-${buildingId}`, () => new Promise(async (resolve, reject) => {
             await villageLock(this._lock, this._village, async () => {
@@ -102,8 +102,8 @@ export default class BuildQueue {
                             return;
                         }
                         if (parseInt(building.level) < level) {
-                            this.upgradeToRequirements(key, level);
-                            // console.error(`${this._village.name} :: ${placeId} :: cannot build - requiured ${building.name} level ${element} but ${building.level} is built`);
+                            console.error(`${this._village.name} :: ${placeId} :: ${building.name} ::  ${level} / ${building.level} is built`);
+                            await this.upgradeToRequirements(key, level);
                             // resolve();
                             // return;
                         }
@@ -115,12 +115,12 @@ export default class BuildQueue {
                 if (!captcha || !placeId || !buildingId) {
                     console.error('error in queue while parsing parameters, ');
                     console.error(`captcha: ${captcha} :: placeId: ${placeId} :: buildingId ${buildingId}`);
-                    resolve();
-                    return;
+                } else {
+                    const response = await this._village.api.newBuilding(placeId, buildingId, captcha);
+                    updateVillageInformation(this._village);
+                    await delay("0:0:1");
                 }
-                const response = await this._village.api.newBuilding(placeId, buildingId, captcha);
-                updateVillageInformation(this._village);
-                await delay("0:0:2");
+                callback()
                 resolve();
             })
         }));
@@ -128,10 +128,11 @@ export default class BuildQueue {
         console.log("Added new building to queue");
     }
 
-    upgradeToRequirements = (buildingName, requiredLevel ) => {
+    upgradeToRequirements = async (buildingName, requiredLevel ) => {
         const building = this._village.buildingStore.getByName(buildingName);
         for (let level = 0; level < requiredLevel - building.level; level++) {
-            upgradeBuilding(this._village, building);
+            console.log(`added upgrade queue`)
+            await upgradeBuilding(this._village, building);
         }
     }
 }

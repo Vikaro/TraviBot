@@ -1,6 +1,4 @@
-import { travianAPI } from "../TravianAPI";
-import { parseAdventurePage, parseAdventuresPage } from "../parser/TravianParser";
-import { changeVillage } from "./villageService";
+import {parseAdventuresPage } from "../parser/TravianParser";
 import Village from "../model/Village";
 import { villageLock } from "./locksService";
 
