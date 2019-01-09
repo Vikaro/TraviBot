@@ -48,6 +48,7 @@ export async function runAllAdventures() {
 export async function fetchVillages() {
   const response = await api.fetchVillages();
   appStore.villages = response.data;
+  console.log(response.data);
 }
 
 export async function autoBuildVillage(villageId) {

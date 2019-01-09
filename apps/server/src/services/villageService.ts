@@ -2,9 +2,10 @@ import Village from '../model/Village';
 import TravianAPI from '../TravianAPI';
 import {
   parseVillageList,
-  parseResourcesPage,
+  parseResourcePageBuildings,
   parseVillageBuildings,
-  parseTroops
+  parseTroops,
+  parseResources
 } from '../parser/TravianParser';
 import User from '../db';
 import * as request from 'superagent';
@@ -69,7 +70,7 @@ export async function updateVillageInformation(village: Village) {
     const villagePage = village.api.villagePage();
 
     const resourceData = await resourcePage;
-    const { actualQueue, resourceBuildings } = parseResourcesPage(resourceData);
+    const { actualQueue, resourceBuildings } = parseResourcePageBuildings(resourceData);
     actualQueue.forEach(element => {
       village.getBuildingsQueue().addExistingTask(element);
     });
@@ -78,5 +79,7 @@ export async function updateVillageInformation(village: Village) {
     village.buildingStore.addBuildings(resourceBuildings);
     village.buildingStore.addBuildings(villageData);
     village.unitsStore.addUnits(parseTroops(resourceData));
+    village.resources = parseResources(resourceData);
+    
   });
 }

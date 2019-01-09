@@ -32,3 +32,4 @@ export async function smithyUpgrades(villageId) { return api.get(`/villages/${vi
 export async function smithyAutoUpgrade(villageId) { return api.get(`/villages/${villageId}/smithy/auto`)}
 export async function smithyUpgrade(villageId, upgradeId) { return api.get(`/villages/${villageId}/smithy/${upgradeId}`)}
 export async function sendUnits(villageId, data) { return api.post(`/villages/${villageId}/send-units`,data)}
+export async function sendResources(villageId, data) { return api.post(`/villages/${villageId}/send-resources`,data)}

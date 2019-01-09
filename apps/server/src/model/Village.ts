@@ -7,6 +7,7 @@ import smithQueue from '../queue/smithQueue';
 import Upgrade from './Upgrade';
 import * as domain from 'domain';
 import UnitsStore from './UnitsStore';
+import Resources from './Resources';
 
 export default class Village {
   public buildingStore: BuildingsStore;
@@ -18,7 +19,7 @@ export default class Village {
   public isActive: boolean;
   public name: string;
   public domain = domain.create();
-
+  public resources: Resources;
   private _buildingQueue: BuildQueue;
   // army
   //   private _baracksQueue;

@@ -25,13 +25,14 @@ function serializeUserVillages(userData: User) {
   let serializedUserData = {};
   for (const villageId in userData.villages) {
     const village: Village = userData.villages[villageId];
-    const { buildingStore, id, isActive, name, unitsStore } = village;
+    const { buildingStore, id, isActive, name, unitsStore, resources } = village;
     serializedUserData[villageId] = {
       name,
       id,
       isActive,
       buildingStore,
-      unitsStore
+      unitsStore,
+      resources
     };
   }
   return serializedUserData;
@@ -360,11 +361,24 @@ app.get('/api/villages/:villageId/new-buildings', async (req, res) => {
   res.send('buildings added');
 });
 
-app.get('/api/villages/:villageId/send-resources', async (req, res) => {
+app.post('/api/villages/:villageId/send-resources', async (req, res) => {
   const { villageId } = req.params;
-  const { iron, wood, clay, crop, targetId } = req.query;
+  const { iron, wood, clay, crop, targetId, repeat } = req.body;
+  console.log(req.body);
   const village = User1.villages[villageId];
-  await sendResourcesToVillage(village, targetId, { iron, wood, clay, crop });
+  if (repeat) {
+    const task = new RepeatableTask({
+      name: repeat.name,
+      id: Object.keys(User1.repeatableTraderTasks.tasks).length,
+      time: repeat.time,
+      callback: () => sendResourcesToVillage(village, targetId, { iron, wood, clay, crop })
+    });
+    User1.repeatableUnitTasks.tasks[task.getId()] = task;
+    task.start();
+  } else {
+    await sendResourcesToVillage(village, targetId, { iron, wood, clay, crop });
+  }
+
   res.send('resources sent');
 });
 
@@ -401,7 +415,7 @@ app.post('/api/villages/:villageId/send-units', async (req, res) => {
   console.log(req.body);
   const village = User1.villages[villageId];
   const { units, target, type, repeat } = req.body;
-  if(repeat){
+  if (repeat) {
     const task = new RepeatableTask({
       name: repeat.name,
       id: Object.keys(User1.repeatableUnitTasks.tasks).length,

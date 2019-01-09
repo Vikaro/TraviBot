@@ -4,6 +4,7 @@ import { Response } from 'superagent';
 import Adventure from '../model/adventure';
 import { remove } from '../utility/text';
 import Unit from '../model/Unit';
+import Resources from '../model/Resources';
 
 export function parseVillageBuildings(res): { [key: string]: Building } {
   const $res = $(res.text);
@@ -192,11 +193,11 @@ export function parseBuildingPage(res: Response) {
   return building;
 }
 
-export function parseResourcesPage(
+export function parseResourcePageBuildings(
   res: Response
 ): { actualQueue: Array<Building>; resourceBuildings: Array<Building> } {
   const $res = $(res.text);
-  var buildingList = $res.find('.buildingList .boxes-contents ul li');
+  const buildingList = $res.find('.buildingList .boxes-contents ul li');
   const actualQueue = buildingList.map(parseActualQueue).get();
 
   const resourceBuildings: Array<Building> = parseResourceBuildings(res);
@@ -205,7 +206,17 @@ export function parseResourcesPage(
     resourceBuildings
   };
 }
-
+/** Parse resources from page */
+export function parseResources(res: Response){
+  const $res = $(res.text);
+  const wood = $res.find('#l1').text();
+  const clay = $res.find('#l2').text();
+  const iron = $res.find('#l3').text();
+  const crop = $res.find('#l4').text();
+  return new Resources({
+    wood, clay, iron, crop
+  })
+}
 /** Parse troops from resourcePage */
 export function parseTroops(res: Response) {
   const $res = $(res.text);

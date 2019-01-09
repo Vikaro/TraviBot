@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import * as api from "api/api";
 import { withStyles } from "@material-ui/core/styles";
 import { view } from "react-easy-state";
-import appStore, { autoBuildVillage } from "store/store";
+import appStore, { autoBuildVillage, fetchVillages } from "store/store";
 import Card from "components/Card/Card";
 import CardFooter from "components/Card/CardFooter";
 import CardHeader from "components/Card/CardHeader";
@@ -27,7 +27,8 @@ import GridItem from "components/Grid/GridItem";
 import CardBody from "components/Card/CardBody";
 // import DraftsIcon from '@material-ui/icons/Drafts';
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
-import VillageUnitsCard from "./VillageUnitsVillageUnitsCard";
+import VillageUnitsCard from "./VillageUnitsCard";
+import VillageMarketCard from "./VillageMarketCard";
 
 const styles = theme => ({
   root: {
@@ -50,6 +51,12 @@ class Village extends Component {
   handleAutoBuildVillage = () => autoBuildVillage(this.state.village.id);
   handleAutoUpgradeUnits = () => api.smithyAutoUpgrade(this.state.village.id);
   async componentDidMount() {
+    await fetchVillages();
+    if(!this.state.village){
+      this.setState({
+        village: appStore.villages[this.props.match.params.villageId]
+      });
+    }
     const { villageId } = this.props.match.params;
     const smithyUpgradesResponse = await api.smithyUpgrades(villageId);
     const smithyUpgrades = Object.values(smithyUpgradesResponse.data);
@@ -64,8 +71,7 @@ class Village extends Component {
     const { classes } = this.props;
 
     if (!village) return <NoVillageFound />;
-
-    const { buildingStore, unitsStore } = village;
+    const { buildingStore, unitsStore, resources } = village;
     const { buildings } = buildingStore;
     const resourceBuildings = Object.values(buildings).filter(
       i => parseInt(i.id) < 19
@@ -101,7 +107,6 @@ class Village extends Component {
                 classes={classes}
               />
               <RegularButton onClick={this.handleAutoBuildVillage}>
-                {" "}
                 Auto Build village
               </RegularButton>
             </CardBody>
@@ -154,8 +159,10 @@ class Village extends Component {
           </Card>
         </GridItem>
         <GridItem md={6}>
-        
               <VillageUnitsCard units={units} village={village} />
+        </GridItem>
+        <GridItem md={6}>
+              <VillageMarketCard resources={resources} village={village} />
         </GridItem>
       </GridContainer>
     );

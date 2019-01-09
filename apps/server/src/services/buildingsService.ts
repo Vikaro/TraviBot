@@ -1,5 +1,5 @@
 import Building, { maxLevel } from "../model/Building";
-import { parseBuildingPage, parseVillageList, parseResourcesPage } from "../parser/TravianParser";
+import { parseBuildingPage, parseVillageList, parseResourcePageBuildings } from "../parser/TravianParser";
 import Village from "../model/Village";
 import { updateVillageInformation } from "./villageService";
 
